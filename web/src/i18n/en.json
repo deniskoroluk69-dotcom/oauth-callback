@@ -1,0 +1,357 @@
+{
+  "meta": {
+    "home": {
+      "title": "KnB Stats — all your social media statistics in one place",
+      "description": "Connect YouTube, Facebook, Instagram, Threads, TikTok, LinkedIn, Telegram and your podcast and get daily statistics for your own channels. Read-only — we never post anything."
+    },
+    "privacy": {
+      "title": "Privacy Policy — KnB Stats",
+      "description": "What data KnB Stats collects, why, how it is stored and how to delete it."
+    },
+    "terms": {
+      "title": "Terms of Service — KnB Stats",
+      "description": "Terms of Service of KnB Stats."
+    },
+    "deletion": {
+      "title": "Data Deletion — KnB Stats",
+      "description": "How to revoke access and delete all your data from KnB Stats."
+    },
+    "contact": {
+      "title": "Contact — KnB Stats",
+      "description": "Get in touch with the KnB Stats team."
+    },
+    "login": {
+      "title": "Sign in — KnB Stats",
+      "description": "Sign in to your KnB Stats account."
+    },
+    "connections": {
+      "title": "My platforms — KnB Stats",
+      "description": "Connect your social media accounts."
+    },
+    "dashboard": {
+      "title": "Statistics — KnB Stats",
+      "description": "Statistics of your connected platforms."
+    },
+    "settings": {
+      "title": "Settings — KnB Stats",
+      "description": "Account settings."
+    },
+    "consent": {
+      "title": "Access permission (demo) — KnB Stats",
+      "description": "Simulated platform consent screen."
+    },
+    "notFound": {
+      "title": "Page not found — KnB Stats",
+      "description": "Page not found."
+    }
+  },
+  "nav": {
+    "skip": "Skip to content",
+    "features": "Features",
+    "how": "How it works",
+    "platforms": "Platforms",
+    "login": "Sign in",
+    "cabinet": "Dashboard",
+    "logout": "Sign out",
+    "dashboard": "Statistics",
+    "connections": "My platforms",
+    "settings": "Settings",
+    "menu": "Menu",
+    "language": "Language",
+    "toggleTheme": "Toggle theme",
+    "mainNav": "Main navigation",
+    "appNav": "Account navigation"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "deletion": "Data deletion",
+    "contact": "Contact",
+    "readOnly": "Read-only statistics. We never post anything to your accounts."
+  },
+  "common": {
+    "soon": "Coming soon",
+    "loading": "Loading…",
+    "save": "Save",
+    "saved": "Saved",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "back": "Back",
+    "retry": "Try again",
+    "error": "Something went wrong. Please try again or contact us.",
+    "lastUpdated": "Last updated",
+    "demo": "Demo version: all data is sample data, connections are simulated",
+    "never": "not yet",
+    "justNow": "just now",
+    "minutesAgo": "{n} min ago",
+    "hoursAgo": "{n} h ago",
+    "daysAgo": "{n} d ago",
+    "copy": "Copy",
+    "unavailable": "Sign-in is temporarily unavailable. Please try again later or contact us."
+  },
+  "home": {
+    "badge": "Read-only · we never post",
+    "title": "Statistics for all your channels — in one place",
+    "subtitle": "KnB Stats collects daily metrics of your own pages and channels on YouTube, Facebook, Instagram, Threads, TikTok, LinkedIn, Telegram and your podcast, and shows them on one clear dashboard.",
+    "ctaLogin": "Sign in and connect",
+    "ctaHow": "How it works",
+    "readOnly": "We request read-only access to statistics. The service never posts, deletes or changes anything in your accounts.",
+    "featuresTitle": "Why KnB Stats",
+    "f1t": "One dashboard instead of eight",
+    "f1d": "Followers, views, reach and engagement from every platform side by side, measured the same way.",
+    "f2t": "Automatic daily updates",
+    "f2d": "Every morning at 05:00 Kyiv time the server collects fresh numbers. No manual exports.",
+    "f3t": "Period comparison",
+    "f3d": "Pick any dates and instantly see growth or decline versus the previous period.",
+    "f4t": "Secure by default",
+    "f4d": "Access tokens are stored only on the server, encrypted, and never reach the browser.",
+    "howTitle": "How it works",
+    "s1t": "Sign in",
+    "s1d": "With Google or email — in a minute.",
+    "s2t": "Connect your platforms",
+    "s2d": "Click “Connect” and grant read-only access to statistics on the platform's own consent screen.",
+    "s3t": "See your statistics",
+    "s3d": "Data appears immediately, with up to 30–90 days of history, and is refreshed daily.",
+    "platformsTitle": "Supported platforms",
+    "platformsText": "Connect only pages and channels you own or manage.",
+    "shotsTitle": "Inside the dashboard",
+    "shot1": "Overview metrics and daily charts",
+    "shot2": "My platforms: connection statuses",
+    "shot3": "Top posts with links to the originals",
+    "trustTitle": "Your data stays under your control",
+    "t1": "Disconnect a platform in one click — tokens and data are deleted immediately.",
+    "t2": "We never sell your data or use it for advertising.",
+    "t3": "Delete your account and all data in Settings at any time.",
+    "ctaBottomTitle": "Get started in a minute",
+    "ctaBottomText": "Free sign-in with Google or email."
+  },
+  "login": {
+    "title": "Sign in to KnB Stats",
+    "subtitle": "Sign in to connect your platforms and see your statistics.",
+    "google": "Sign in with Google",
+    "or": "or",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "toSignUp": "No account? Sign up",
+    "toSignIn": "Already have an account? Sign in",
+    "forgot": "Forgot password?",
+    "resetSent": "If an account exists for this email, we have sent a password reset link.",
+    "agree": "By signing in you agree to the {terms} and {privacy}.",
+    "verifyTitle": "Verify your email",
+    "verifyText": "We sent an email to {email}. Follow the link in it, then click “I have verified”.",
+    "verifyResend": "Resend email",
+    "verifyDone": "I have verified",
+    "verifySent": "Email sent again.",
+    "demoHint": "Demo: enter any email and a password of 6+ characters, or click “Sign in with Google”.",
+    "err": {
+      "invalid": "Wrong email or password.",
+      "weak": "The password must be at least 6 characters.",
+      "exists": "An account with this email already exists. Please sign in.",
+      "email": "Enter a valid email.",
+      "popup": "The sign-in window was closed. Please try again.",
+      "tooMany": "Too many attempts. Please wait a few minutes.",
+      "network": "No network connection."
+    }
+  },
+  "connections": {
+    "title": "My platforms",
+    "subtitle": "Connect your own channels. We only request read-only access to statistics.",
+    "status": {
+      "none": "Not connected",
+      "active": "Connected ✓",
+      "needs_reconnect": "Reconnect required ⚠",
+      "disconnected": "Disconnected",
+      "error": "Collection error",
+      "soon": "Coming soon"
+    },
+    "connect": "Connect",
+    "addAccount": "Add another account",
+    "disconnect": "Disconnect",
+    "refresh": "Refresh now",
+    "reconnect": "Reconnect",
+    "lastSync": "Updated: {when}",
+    "expires": "Access valid until {date}",
+    "refreshQueued": "Refresh queued. Data will appear in a minute.",
+    "refreshTooSoon": "Manual refresh is limited to once an hour. Try again in {minutes} min.",
+    "connected": "{platform} connected. Collecting statistics and history.",
+    "confirmDisconnect": "Disconnect “{account}”? We will revoke access on the platform and delete the tokens and all statistics of this account.",
+    "disconnectedToast": "Account disconnected, data deleted.",
+    "scopes": "Permissions: {scopes}",
+    "soonText": "Connection will be available once the platform approves our app.",
+    "err": {
+      "denied": "You cancelled the permission. Nothing was connected.",
+      "expired": "The connection session expired. Please start again.",
+      "generic": "Could not connect the platform. Please try again.",
+      "noAccounts": "No accounts you have access to were found."
+    },
+    "select": {
+      "title": "Choose accounts to connect",
+      "text": "You have several accounts. Select the ones whose statistics you want to see.",
+      "confirm": "Connect selected",
+      "none": "Select at least one account."
+    },
+    "telegram": {
+      "title": "Connect a Telegram channel",
+      "step1": "Enter the @username of your public channel.",
+      "step2": "Add {bot} as a channel administrator. Turn off all posting and editing rights — the bot only needs to read.",
+      "step3": "Click “Verify”.",
+      "placeholder": "@my_channel",
+      "verify": "Verify",
+      "ok": "Channel connected.",
+      "notAdmin": "The bot is not an administrator of this channel yet, or the channel was not found.",
+      "invalid": "Enter the name as @channel_name.",
+      "viewsSoon": "Post views — coming soon (separate stage)."
+    },
+    "podcast": {
+      "title": "Connect a podcast",
+      "text": "Paste the link to your podcast RSS feed.",
+      "placeholder": "https://example.com/podcast.rss",
+      "add": "Verify and connect",
+      "invalid": "This does not look like a valid podcast RSS feed.",
+      "ok": "Podcast “{title}” connected."
+    },
+    "linkedin": {
+      "title": "LinkedIn analytics import",
+      "text": "While API access is under review by LinkedIn, upload your page analytics export (.xlsx, .xls or .csv): Page → Analytics → Export.",
+      "upload": "Upload export",
+      "ok": "Imported {rows} days of statistics.",
+      "fail": "Could not read the file. Please upload the original LinkedIn export.",
+      "tooBig": "File too large (5 MB max).",
+      "oauthSoon": "Direct connection — coming soon"
+    },
+    "demo": {
+      "title": "Demo tools",
+      "sync": "Simulate nightly collection",
+      "expire": "Simulate expired token",
+      "synced": "Nightly collection done.",
+      "all": "Connect all platforms (demo)",
+      "allDone": "All platforms connected. Open “Statistics”."
+    }
+  },
+  "consent": {
+    "demoNote": "Demo mode: this simulates the consent screen. In production the real {platform} page opens here.",
+    "wants": "{app} wants to access your {platform} account",
+    "readOnly": "Read-only. The app will not be able to post or change anything.",
+    "allow": "Allow",
+    "deny": "Cancel"
+  },
+  "dashboard": {
+    "title": "Statistics",
+    "emptyTitle": "Connect your first platform",
+    "emptyText": "As soon as you connect a channel, charts, period comparison and top posts will appear here.",
+    "emptyCta": "Go to “My platforms”",
+    "all": "All platforms",
+    "period": "Period",
+    "d7": "7 days",
+    "d30": "30 days",
+    "d90": "90 days",
+    "custom": "Custom",
+    "from": "From",
+    "to": "To",
+    "compare": "Compare with",
+    "comparePrev": "previous period",
+    "compareCustom": "other dates",
+    "compareOff": "no comparison",
+    "apply": "Apply",
+    "kpi": {
+      "followers": "Followers",
+      "newFollowers": "New followers",
+      "views": "Views",
+      "reach": "Reach",
+      "interactions": "Engagements",
+      "engagement": "Engagement rate",
+      "watchMinutes": "Watch minutes"
+    },
+    "vs": "vs prev. period",
+    "chart": "Daily trend",
+    "metric": "Metric",
+    "current": "Current period",
+    "previous": "Comparison period",
+    "byPlatform": "By platform",
+    "breakdown": "Breakdown",
+    "bd": {
+      "organic": "Organic",
+      "paid": "Paid",
+      "shorts": "Shorts",
+      "long": "Long videos",
+      "reels": "Reels",
+      "posts": "Posts",
+      "stories": "Stories"
+    },
+    "top": "Top posts",
+    "col": {
+      "post": "Post",
+      "platform": "Platform",
+      "account": "Account",
+      "date": "Date",
+      "views": "Views",
+      "interactions": "Engagements",
+      "followers": "Followers",
+      "change": "Change"
+    },
+    "open": "Open original",
+    "source": "Data source: {name}",
+    "sourceYoutube": "Data provided by the YouTube Analytics API",
+    "noData": "No data for the selected period.",
+    "tgViews": "Telegram post views — coming soon"
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "language": "Interface and email language",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "notifyEmail": "Notification email",
+    "notifyHint": "We send “please reconnect” emails here when access to a platform is about to expire.",
+    "save": "Save",
+    "saved": "Settings saved.",
+    "account": "Account",
+    "signedInAs": "Signed in as {email}",
+    "danger": "Danger zone",
+    "deleteText": "Deleting your account revokes access on all platforms and deletes all tokens, statistics and your profile. This cannot be undone.",
+    "deleteBtn": "Delete account and all data",
+    "deleteTitle": "Delete your account permanently?",
+    "deleteConfirm": "To confirm, type {word}.",
+    "deleteWord": "DELETE",
+    "deleting": "Deleting…",
+    "deleted": "Your account and all data have been deleted."
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "Questions about the service, your data or partnership? Write to us — we reply within 2 business days.",
+    "emailUs": "Support email",
+    "company": "Service owner",
+    "name": "Name",
+    "email": "Your email",
+    "message": "Message",
+    "send": "Send",
+    "sent": "Thank you! Your message has been sent.",
+    "invalid": "Please fill in all fields correctly.",
+    "recaptcha": "This form is protected by Firebase App Check (reCAPTCHA Enterprise)."
+  },
+  "deletion": {
+    "statusTitle": "Deletion request status",
+    "code": "Confirmation code",
+    "received": "Request received, deletion in progress",
+    "completed": "Data deleted",
+    "notFound": "No request with this code was found.",
+    "receivedAt": "Received",
+    "completedAt": "Completed"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "The address may be mistyped or the page may have moved.",
+    "home": "Go to home page"
+  },
+  "sync": {
+    "authExpired": "Access to the platform expired or was revoked. Please reconnect.",
+    "temporary": "Temporary platform error. We will retry automatically.",
+    "unknown": "Could not collect data. We are looking into it."
+  }
+}

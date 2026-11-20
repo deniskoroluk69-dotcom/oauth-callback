@@ -1,0 +1,22 @@
+{
+  "name": "knb-stats",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "install:all": "npm install && npm --prefix web install && npm --prefix functions install",
+    "dev:demo": "npm --prefix web run dev:demo",
+    "build": "npm --prefix functions run build && npm --prefix web run build",
+    "test": "npm --prefix functions test && npm run test:rules:emulator",
+    "test:rules": "vitest run --root tests",
+    "test:rules:emulator": "firebase emulators:exec --only firestore --project demo-knb-stats \"npm run test:rules\"",
+    "emulators": "npm --prefix functions run build && firebase emulators:start --project demo-knb-stats --import=./.emulator-data --export-on-exit",
+    "secrets:scan": "node scripts/secret-scan.mjs",
+    "test:smoke": "npm --prefix functions run build && firebase emulators:exec --only auth,firestore,functions,hosting,tasks --project demo-knb-stats \"node scripts/emulator-smoke.mjs\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.0",
+    "firebase": "^12.0.0",
+    "vitest": "^3.0.0"
+  }
+}

@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            web/package-lock.json
+            functions/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install
+        run: |
+          npm ci
+          npm --prefix web ci
+          npm --prefix functions ci
+
+      - name: Secret scan (вбудований)
+        run: node scripts/secret-scan.mjs
+
+      - name: Secret scan (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Typecheck
+        run: |
+          npm --prefix web run typecheck
+          npm --prefix functions run typecheck
+
+      - name: Unit tests (signed_request, TikTok token rotation, parsers, crypto)
+        run: npm --prefix functions test
+
+      - name: Firestore rules tests (emulator)
+        run: npx firebase-tools@14 emulators:exec --only firestore --project demo-knb-stats "npm run test:rules"
+
+      - name: Build functions
+        run: npm --prefix functions run build
+
+      - name: Build web
+        run: npm --prefix web run build
+        env:
+          VITE_SITE_DOMAIN: ${{ vars.VITE_SITE_DOMAIN }}
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+          VITE_FIREBASE_API_KEY: ${{ vars.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ vars.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_APP_ID: ${{ vars.VITE_FIREBASE_APP_ID }}
+          VITE_RECAPTCHA_SITE_KEY: ${{ vars.VITE_RECAPTCHA_SITE_KEY }}
+
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push'
+        with:
+          name: web-dist
+          path: web/dist
+          retention-days: 7

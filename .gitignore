@@ -1,0 +1,42 @@
+# Залежності та збірки
+node_modules/
+web/dist/
+web/dist-ssr/
+functions/lib/
+.emulator-data/
+*.log
+firebase-debug*.log
+firestore-debug.log
+ui-debug.log
+pubsub-debug.log
+.firebase/
+
+# Секрети — НІКОЛИ в git
+.env
+.env.*
+!.env.example
+!web/.env.example
+!functions/.env.example
+!web/.env.demo
+.secret.local
+**/.secret.local
+*service-account*.json
+*serviceAccount*.json
+*-credentials.json
+*.pem
+*.key
+*.p12
+*TOKENS*
+*tokens*.json
+secrets/
+
+# Редактори / ОС
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Локальні налаштування Claude Code
+.claude/
+KnB-Stats-site-PROMPT.md

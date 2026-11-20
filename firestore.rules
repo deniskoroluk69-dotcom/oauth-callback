@@ -1,0 +1,54 @@
+rules_version = '2';
+
+// Принципи:
+//  • користувач читає лише свої users/{uid}/**;
+//  • клієнт може змінювати лише власні налаштування профілю (lang, theme, notifyEmail);
+//  • статистику, підключення й токени пише ЛИШЕ сервер (Admin SDK обходить правила);
+//  • secrets/**, oauthStates/**, pendingSelections/**, mail/** — повна заборона для клієнта;
+//  • deletionRequests/{code} — лише читання одного документа за кодом (статус запиту Meta).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function validPrefs(d) {
+      return (!('lang' in d) || d.lang in ['uk', 'en'])
+        && (!('theme' in d) || d.theme in ['system', 'light', 'dark'])
+        && (!('notifyEmail' in d) || (d.notifyEmail is string && d.notifyEmail.size() <= 200
+              && (d.notifyEmail == '' || d.notifyEmail.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$'))));
+    }
+
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(['lang', 'theme', 'notifyEmail'])
+        && validPrefs(request.resource.data);
+      allow update: if isOwner(uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lang', 'theme', 'notifyEmail'])
+        && validPrefs(request.resource.data);
+      allow delete: if false;
+
+      // Підключення, денна статистика, публікації — лише читання власних.
+      match /{sub}/{docId} {
+        allow read: if isOwner(uid) && sub in ['connections', 'daily', 'content'];
+        allow write: if false;
+      }
+    }
+
+    match /deletionRequests/{code} {
+      allow get: if true;
+      allow list, write: if false;
+    }
+
+    // Усе інше (secrets, oauthStates, pendingSelections, mail, syncRuns, rateLimits, contactMessages) — закрито.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
