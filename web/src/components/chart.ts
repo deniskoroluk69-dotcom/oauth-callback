@@ -43,7 +43,9 @@ export function mountLineChart(host: HTMLElement, opts: LineChartOptions): () =>
   let idx = -1;
   let W = 0;
 
-  host.classList.add('chart');
+  host.classList.add('chart', 'chart-intro');
+  // Анімація малювання лише при першій появі, не при кожній перебудові (resize).
+  setTimeout(() => host.classList.remove('chart-intro'), 2200);
   host.innerHTML = `<svg tabindex="0" role="img" aria-label="${esc(opts.ariaLabel)}"></svg><div class="chart-tip" aria-hidden="true"></div><p class="sr-only" aria-live="polite"></p>`;
   const svg = host.querySelector('svg')!;
   const tip = host.querySelector('.chart-tip') as HTMLElement;
@@ -99,9 +101,9 @@ export function mountLineChart(host: HTMLElement, opts: LineChartOptions): () =>
         if (!d) return '';
         const area =
           s.area && n > 1
-            ? `<path d="${d} L${x(s.values.length - 1)},${y(yMin)} L${x(0)},${y(yMin)} Z" fill="url(#${gid}-${s.color.replace(/[^a-z0-9]/gi, '')})"/>`
+            ? `<path class="area-in" d="${d} L${x(s.values.length - 1)},${y(yMin)} L${x(0)},${y(yMin)} Z" fill="url(#${gid}-${s.color.replace(/[^a-z0-9]/gi, '')})"/>`
             : '';
-        return `${area}<path d="${d}" fill="none" stroke="${s.color}" stroke-width="${s.dashed ? 2 : 2.5}" ${s.dashed ? 'stroke-dasharray="5 4"' : ''} stroke-linejoin="round" stroke-linecap="round"/>`;
+        return `${area}<path ${s.dashed ? 'class="fade-in"' : 'class="draw" pathLength="1"'} d="${d}" fill="none" stroke="${s.color}" stroke-width="${s.dashed ? 2 : 2.5}" ${s.dashed ? 'stroke-dasharray="5 4"' : ''} stroke-linejoin="round" stroke-linecap="round"/>`;
       })
       .join('');
     const defs = opts.series

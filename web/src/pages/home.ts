@@ -1,5 +1,5 @@
 import { PLATFORMS, PLATFORM_ORDER, type PlatformId } from '@platforms';
-import { t } from '../i18n';
+import { fmtCompact, t } from '../i18n';
 import { href, type Page } from '../router';
 import { ICON, platformIcon } from '../components/icons';
 
@@ -28,18 +28,19 @@ function heroMock(): string {
   return `
   <div class="mock" aria-hidden="true">
     <div class="mock-kpis">
-      <div class="mock-kpi"><div class="l">${t('dashboard.kpi.followers')}</div><div class="v">${t('home.pv.v1')}</div><div class="d">▲ ${t('home.pv.d1')}</div></div>
-      <div class="mock-kpi"><div class="l">${t('dashboard.kpi.views')}</div><div class="v">${t('home.pv.v2')}</div><div class="d">▲ ${t('home.pv.d2')}</div></div>
-      <div class="mock-kpi"><div class="l">${t('dashboard.kpi.interactions')}</div><div class="v">${t('home.pv.v3')}</div><div class="d">▲ ${t('home.pv.d3')}</div></div>
+      <div class="mock-kpi"><div class="l">${t('dashboard.kpi.followers')}</div><div class="v" data-count="48200">${fmtCompact(48200)}</div><div class="d">▲ ${t('home.pv.d1')}</div></div>
+      <div class="mock-kpi"><div class="l">${t('dashboard.kpi.views')}</div><div class="v" data-count="1300000">${fmtCompact(1300000)}</div><div class="d">▲ ${t('home.pv.d2')}</div></div>
+      <div class="mock-kpi"><div class="l">${t('dashboard.kpi.interactions')}</div><div class="v" data-count="92000">${fmtCompact(92000)}</div><div class="d">▲ ${t('home.pv.d3')}</div></div>
     </div>
     <svg viewBox="0 0 520 160" role="img">
       <defs><linearGradient id="hg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--accent)" stop-opacity=".28"/><stop offset="1" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>
       ${[0, 1, 2, 3].map((i) => `<line x1="0" x2="520" y1="${i * 50 + 5}" y2="${i * 50 + 5}" stroke="var(--chart-grid)"/>`).join('')}
-      <path d="${p.prev}" fill="none" stroke="var(--chart-prev)" stroke-width="2" stroke-dasharray="5 4"/>
-      <path d="${p.area}" fill="url(#hg)"/>
-      <path d="${p.line}" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round"/>
+      <path class="fade-in" d="${p.prev}" fill="none" stroke="var(--chart-prev)" stroke-width="2" stroke-dasharray="5 4"/>
+      <path class="area-in" d="${p.area}" fill="url(#hg)"/>
+      <path class="draw" pathLength="1" d="${p.line}" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round"/>
+      <circle class="pulse-dot" cx="520" cy="${p.line.split(' ').pop()!.split(',')[1]}" r="4" fill="var(--accent)"/>
     </svg>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div class="mock-icons">
       ${PLATFORM_ORDER.slice(0, 6).map((id) => platformIcon(id, 'sm')).join('')}
     </div>
   </div>`;
@@ -48,24 +49,24 @@ function heroMock(): string {
 /** Мініатюрні превʼю кабінету (живий HTML у стилі сайту — без зображень і заглушок). */
 function preview(kind: 1 | 2 | 3): string {
   const head = (title: string, meta: string) =>
-    `<div class="pv-head"><span class="pv-logo">${ICON.logo}</span><strong>${title}</strong><span class="pv-meta">${meta}</span></div>`;
+    `<div class="pv-head"><span class="pv-logo">${ICON.logo}</span><strong>${title}</strong><span class="pv-meta"><span class="live-dot" aria-hidden="true"></span>${meta}</span></div>`;
   if (kind === 1) {
     const p = sparkPath(3, 300, 80, 24);
-    const kpi = (label: string, value: string, delta: string) =>
-      `<div class="pv-kpi"><span class="pv-label">${label}</span><span class="pv-value">${value}</span><span class="pv-delta up">▲ ${delta}</span></div>`;
+    const kpi = (label: string, value: number, delta: string) =>
+      `<div class="pv-kpi"><span class="pv-label">${label}</span><span class="pv-value" data-count="${value}">${fmtCompact(value)}</span><span class="pv-delta up">▲ ${delta}</span></div>`;
     return `
       ${head(t('dashboard.title'), t('dashboard.d30'))}
       <div class="pv-kpis">
-        ${kpi(t('dashboard.kpi.followers'), t('home.pv.v1'), t('home.pv.d1'))}
-        ${kpi(t('dashboard.kpi.views'), t('home.pv.v2'), t('home.pv.d2'))}
-        ${kpi(t('dashboard.kpi.interactions'), t('home.pv.v3'), t('home.pv.d3'))}
+        ${kpi(t('dashboard.kpi.followers'), 48200, t('home.pv.d1'))}
+        ${kpi(t('dashboard.kpi.views'), 1300000, t('home.pv.d2'))}
+        ${kpi(t('dashboard.kpi.interactions'), 92000, t('home.pv.d3'))}
       </div>
       <svg class="pv-chart" viewBox="0 0 300 80" preserveAspectRatio="none" aria-hidden="true">
         <defs><linearGradient id="pvg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--accent)" stop-opacity=".25"/><stop offset="1" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>
         <line x1="0" x2="300" y1="20" y2="20" stroke="var(--chart-grid)"/><line x1="0" x2="300" y1="50" y2="50" stroke="var(--chart-grid)"/>
         <path d="${p.prev}" fill="none" stroke="var(--chart-prev)" stroke-width="1.5" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"/>
-        <path d="${p.area}" fill="url(#pvg)"/>
-        <path d="${p.line}" fill="none" stroke="var(--accent)" stroke-width="2" vector-effect="non-scaling-stroke"/>
+        <path class="area-in" d="${p.area}" fill="url(#pvg)"/>
+        <path class="draw" pathLength="1" d="${p.line}" fill="none" stroke="var(--accent)" stroke-width="2" vector-effect="non-scaling-stroke"/>
       </svg>
       <div class="pv-legend"><span><i style="background:var(--accent)"></i>${t('dashboard.current')}</span><span><i class="dashed"></i>${t('dashboard.previous')}</span></div>`;
   }

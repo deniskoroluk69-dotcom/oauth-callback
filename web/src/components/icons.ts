@@ -43,5 +43,5 @@ const GLYPH: Record<PlatformId, string> = {
 
 export function platformIcon(id: PlatformId, size: 'md' | 'sm' = 'md'): string {
   const bg = id === 'instagram' ? 'linear-gradient(45deg,#f58529,#dd2a7b 50%,#8134af)' : id === 'threads' ? '#111' : PLATFORMS[id].color;
-  return `<span class="p-icon${size === 'sm' ? ' sm' : ''}" style="background:${bg}">${GLYPH[id]}</span>`;
+  return `<span class="p-icon p-${id}${size === 'sm' ? ' sm' : ''}" style="background:${bg}">${GLYPH[id]}</span>`;
 }

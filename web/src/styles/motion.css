@@ -1,0 +1,323 @@
+/* =====================================================================
+   Анімації. Усе, що приховує вміст до появи, працює лише під html.anim
+   (ставить lib/motion.ts і лише без «зменшити рух»), тож без JS і для
+   пошукових роботів сторінка показується повністю одразу.
+   ===================================================================== */
+@keyframes kb-fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes kb-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes kb-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes kb-shimmer {
+  0% { background-position: 120% 0; }
+  100% { background-position: -120% 0; }
+}
+@keyframes kb-flow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+@keyframes kb-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes kb-glow {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.9; }
+  50% { transform: translate3d(4%, 3%, 0) scale(1.08); opacity: 1; }
+}
+@keyframes kb-sheen {
+  0%, 60% { transform: translateX(-120%) skewX(-20deg); }
+  100% { transform: translateX(260%) skewX(-20deg); }
+}
+@keyframes kb-ping {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 55%, transparent); }
+  80%, 100% { box-shadow: 0 0 0 6px transparent; }
+}
+@keyframes kb-pulse-r {
+  0%, 100% { r: 4; opacity: 1; }
+  50% { r: 6; opacity: 0.6; }
+}
+@keyframes kb-pop {
+  0% { opacity: 0; transform: scale(0.6); }
+  70% { transform: scale(1.08); }
+  100% { opacity: 1; transform: none; }
+}
+
+/* --- Переливання тексту --- */
+.hero h1 .grad {
+  background-image: linear-gradient(90deg, #f97316, #ea580c, #d9480f, #fb923c, #f59e0b, #f97316);
+  background-size: 300% 100%;
+  animation: kb-flow 9s linear infinite;
+}
+.anim .section-head h2,
+.anim .legal > h1,
+.anim .page-head h1,
+.anim .auth-card h1,
+.anim .cta-band h2 {
+  background-image: linear-gradient(
+    100deg,
+    currentColor 0%,
+    currentColor 42%,
+    var(--accent) 50%,
+    #f59e0b 53%,
+    currentColor 60%,
+    currentColor 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: kb-shimmer 7s ease-in-out infinite;
+}
+.anim .cta-band h2 {
+  background-image: linear-gradient(
+    100deg,
+    currentColor 0%,
+    currentColor 42%,
+    #fff7ed 50%,
+    #ffffff 53%,
+    currentColor 60%,
+    currentColor 100%
+  );
+}
+
+/* --- Перший екран --- */
+.hero::before {
+  animation: kb-glow 12s ease-in-out infinite;
+}
+.anim .hero-grid > div:first-child > * {
+  opacity: 0;
+  animation: kb-fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+.anim .hero-grid > div:first-child > :nth-child(1) { animation-delay: 0.05s; }
+.anim .hero-grid > div:first-child > :nth-child(2) { animation-delay: 0.15s; }
+.anim .hero-grid > div:first-child > :nth-child(3) { animation-delay: 0.28s; }
+.anim .hero-grid > div:first-child > :nth-child(4) { animation-delay: 0.4s; }
+.anim .hero-grid > div:first-child > :nth-child(5) { animation-delay: 0.5s; }
+.anim .hero .mock {
+  opacity: 0;
+  animation:
+    kb-fade-up 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.25s forwards,
+    kb-float 7s ease-in-out 1.4s infinite;
+}
+.mock-icons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.anim .mock-icons .p-icon {
+  opacity: 0;
+  animation: kb-pop 0.45s ease forwards;
+}
+.anim .mock-icons .p-icon:nth-child(1) { animation-delay: 1.3s; }
+.anim .mock-icons .p-icon:nth-child(2) { animation-delay: 1.38s; }
+.anim .mock-icons .p-icon:nth-child(3) { animation-delay: 1.46s; }
+.anim .mock-icons .p-icon:nth-child(4) { animation-delay: 1.54s; }
+.anim .mock-icons .p-icon:nth-child(5) { animation-delay: 1.62s; }
+.anim .mock-icons .p-icon:nth-child(6) { animation-delay: 1.7s; }
+.pulse-dot {
+  animation: kb-pulse-r 2.2s ease-in-out infinite;
+}
+.anim .mock .pulse-dot {
+  opacity: 0;
+  animation:
+    kb-fade-in 0.4s ease 2s forwards,
+    kb-pulse-r 2.2s ease-in-out 2.4s infinite;
+}
+
+/* Блиск на значку «Лише читання» */
+.badge-pill {
+  position: relative;
+  overflow: hidden;
+}
+.badge-pill::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  animation: kb-sheen 5s ease-in-out 1.2s infinite;
+  pointer-events: none;
+}
+
+/* --- Графіки: лінія «малюється» --- */
+.anim .mock .draw,
+.anim .chart-intro .draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: kb-draw 1.8s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
+}
+.anim .mock .area-in,
+.anim .chart-intro .area-in,
+.anim .mock .fade-in,
+.anim .chart-intro .fade-in {
+  opacity: 0;
+  animation: kb-fade-in 0.9s ease 1.3s forwards;
+}
+.anim .reveal .draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.anim .reveal .area-in {
+  opacity: 0;
+}
+.anim .reveal.in .draw {
+  animation: kb-draw 1.6s cubic-bezier(0.4, 0, 0.2, 1) calc(var(--reveal-delay, 0ms) + 0.3s) forwards;
+}
+.anim .reveal.in .area-in {
+  animation: kb-fade-in 0.8s ease calc(var(--reveal-delay, 0ms) + 1.1s) forwards;
+}
+
+/* --- Поява блоків при прокручуванні --- */
+.anim .reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.anim .reveal.in {
+  opacity: 1;
+  transform: none;
+}
+/* Рядки в превʼю кабінету з'являються по черзі */
+.anim .shot.reveal .pv-row,
+.anim .shot.reveal .pv-kpi {
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.anim .shot.reveal.in .pv-row,
+.anim .shot.reveal.in .pv-kpi {
+  opacity: 1;
+  transform: none;
+}
+.anim .shot.reveal.in :is(.pv-row, .pv-kpi):nth-child(2) { transition-delay: calc(var(--reveal-delay, 0ms) + 0.25s); }
+.anim .shot.reveal.in :is(.pv-row, .pv-kpi):nth-child(3) { transition-delay: calc(var(--reveal-delay, 0ms) + 0.4s); }
+.anim .shot.reveal.in :is(.pv-row, .pv-kpi):nth-child(4) { transition-delay: calc(var(--reveal-delay, 0ms) + 0.55s); }
+.anim .shot.reveal.in :is(.pv-row, .pv-kpi):nth-child(5) { transition-delay: calc(var(--reveal-delay, 0ms) + 0.7s); }
+
+/* «Живий» індикатор оновлення */
+.live-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ok);
+  margin-right: 6px;
+  vertical-align: middle;
+  animation: kb-ping 2s ease-out infinite;
+}
+
+/* --- Наведення --- */
+.card,
+.platform-chip,
+.shot-frame,
+.kpi,
+.panel {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+.grid-4 > .card:hover,
+.grid-3 > .card:hover,
+.platform-chip:hover,
+.shot-frame:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+}
+.platform-chip:hover .p-icon {
+  animation: kb-pop 0.45s ease;
+}
+.feature-icon,
+.step-num {
+  transition: transform 0.3s ease;
+}
+.card:hover .feature-icon,
+.card:hover .step-num {
+  transform: rotate(-8deg) scale(1.08);
+}
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 35%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: translateX(-120%) skewX(-20deg);
+  pointer-events: none;
+}
+.btn-primary:hover::after {
+  animation: kb-sheen 0.9s ease forwards;
+}
+.cta-band {
+  background-size: 220% 220%;
+  animation: kb-flow 14s linear infinite;
+}
+.logo-mark {
+  transition: transform 0.35s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.logo:hover .logo-mark {
+  transform: rotate(-10deg) scale(1.08);
+}
+
+/* Повага до системного налаштування «зменшити рух» */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .anim .reveal,
+  .anim .reveal .draw,
+  .anim .reveal .area-in,
+  .anim .hero-grid > div:first-child > *,
+  .anim .hero .mock,
+  .anim .mock-icons .p-icon {
+    opacity: 1 !important;
+    transform: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+/* Страховка (див. public/theme-init.js): після 3 с вміст першого екрана видно завжди. */
+.motion-done .hero-grid > div:first-child > *,
+.motion-done .mock-icons .p-icon,
+.motion-done .hero .mock,
+.motion-done .mock .pulse-dot,
+.motion-done .mock .area-in,
+.motion-done .mock .fade-in,
+.motion-done .chart-intro .area-in,
+.motion-done .chart-intro .fade-in {
+  opacity: 1 !important;
+}
+.motion-done .hero-grid > div:first-child > * {
+  transform: none !important;
+}
+.motion-done .mock .draw,
+.motion-done .chart-intro .draw {
+  stroke-dashoffset: 0 !important;
+}
+
+.anim .reveal.done,
+.anim .reveal.done .pv-row,
+.anim .reveal.done .pv-kpi,
+.anim .reveal.done .area-in {
+  opacity: 1 !important;
+  transform: none !important;
+}
+.anim .reveal.done .draw {
+  stroke-dashoffset: 0 !important;
+}

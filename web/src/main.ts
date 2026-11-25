@@ -1,4 +1,5 @@
 import './styles/main.css';
+import './styles/motion.css';
 import { isLang, preferredLang, rememberLang, setLang, type Lang } from './i18n';
 import { applyTheme, effectiveTheme, getTheme, toggleTheme } from './lib/theme';
 import { href, type Ctx } from './router';
@@ -6,6 +7,7 @@ import { ROUTES, applyHead, headInfo, notFoundPage, renderPage } from './routes'
 import { getBackend } from './services/backend';
 import type { AppUser, Backend } from './services/types';
 import { mountVerify, safeNext, verifyScreen } from './pages/login';
+import { applyMotion, initMotion } from './lib/motion';
 
 const root = document.getElementById('app')!;
 let backend: Backend;
@@ -19,6 +21,7 @@ function syncMode() {
 }
 applyTheme(getTheme());
 syncMode();
+initMotion();
 window.addEventListener('themechange', syncMode);
 window.matchMedia?.('(prefers-color-scheme: dark)').addEventListener('change', syncMode);
 
@@ -71,11 +74,17 @@ async function route() {
     root.innerHTML = renderPage(page.layout === 'app' ? { ...ROUTES['/login'] } : page, ctx, verifyScreen(ctx));
     mountVerify(root, ctx);
   } else {
-    root.innerHTML = renderPage(page, ctx);
+    // Перший показ публічної сторінки: готовий (пререндерений) HTML уже на місці —
+    // не перемальовуємо його, щоб анімації не стартували двічі й не було миготіння.
+    const keepPrerendered =
+      firstRender && !user && page.layout === 'public' && page !== notFoundPage && !!root.querySelector('main') &&
+      (root.querySelector('.lang-switch [aria-current="true"]') as HTMLElement | null)?.dataset.lang === lang;
+    if (!keepPrerendered) root.innerHTML = renderPage(page, ctx);
     const main = root.querySelector('main') as HTMLElement;
     cleanup = page.mount?.(main, ctx);
   }
   applyHead(headInfo(page, ctx), lang);
+  applyMotion(root);
 
   if (firstRender && location.hash) {
     // Пряме посилання на розділ (напр. /en/privacy#tiktok) — прокрутити після рендеру.
