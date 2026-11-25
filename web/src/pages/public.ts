@@ -32,6 +32,13 @@ export const deletionPage: Page = {
       box.innerHTML = `<div class="alert alert-error">${t('deletion.notFound')}</div>`;
       return;
     }
+    const byEmail = () =>
+      (box.innerHTML = `<div class="alert alert-info">${t('deletion.byEmail', {
+        email: `<a href="mailto:${esc(SITE.SUPPORT_EMAIL)}?subject=${encodeURIComponent(`Data deletion ${code}`)}">${esc(SITE.SUPPORT_EMAIL)}</a>`,
+        code: `<code>${esc(code)}</code>`,
+      })}</div>`);
+    // Без серверної частини статус перевірити неможливо — пропонуємо запит поштою.
+    if (ctx.backend.mode === 'unavailable') return void byEmail();
     box.innerHTML = `<div class="card" aria-live="polite"><span class="spinner"></span> ${t('common.loading')}</div>`;
     ctx.backend
       .getDeletionStatus(code)
@@ -49,9 +56,7 @@ export const deletionPage: Page = {
             <p class="muted" style="margin:0">${t('deletion.receivedAt')}: ${fmtDateTime(st.createdAt)}${st.completedAt ? ` · ${t('deletion.completedAt')}: ${fmtDateTime(st.completedAt)}` : ''}</p>
           </section>`;
       })
-      .catch(() => {
-        box.innerHTML = `<div class="alert alert-error">${t('common.error')}</div>`;
-      });
+      .catch(() => byEmail());
   },
 };
 
@@ -97,14 +102,25 @@ export const contactPage: Page = {
         msg.innerHTML = `<div class="alert alert-error">${t('contact.invalid')}</div>`;
         return;
       }
+      if (data.hp) return; // бот заповнив приховане поле
+      // Резерв, коли сервер недоступний: відкриваємо поштову програму з готовим листом.
+      const viaEmail = () => {
+        const subject = `KnB Stats — ${data.name}`;
+        const body = `${data.message}
+
+— ${data.name} <${data.email}>`;
+        location.href = `mailto:${SITE.SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        msg.innerHTML = `<div class="alert alert-ok">${t('contact.mailto')}</div>`;
+      };
+      if (!ctx.backend || ctx.backend.mode === 'unavailable') return viaEmail();
       const btn = form.querySelector('button[type=submit]') as HTMLButtonElement;
       btn.disabled = true;
       try {
-        await ctx.backend!.submitContact(data);
+        await ctx.backend.submitContact(data);
         form.reset();
         msg.innerHTML = `<div class="alert alert-ok">${t('contact.sent')}</div>`;
       } catch {
-        msg.innerHTML = `<div class="alert alert-error">${t('common.error')}</div>`;
+        viaEmail();
       } finally {
         btn.disabled = false;
       }

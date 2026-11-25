@@ -24,7 +24,7 @@ export function publicLayout(ctx: Ctx, inner: string): string {
   const home = href('/', L);
   const authBtn = ctx.user
     ? `<a class="btn btn-primary btn-sm" href="${href('/app/dashboard', L)}">${t('nav.cabinet')}</a>`
-    : `<a class="btn btn-primary btn-sm" href="${href('/login', L)}"><span class="btn-login-text">${t('nav.login')}</span><span aria-hidden="true">→</span></a>`;
+    : `<a class="btn btn-primary btn-sm" href="${href('/login', L)}"><span>${t('nav.login')}</span><span class="btn-login-arrow" aria-hidden="true">→</span></a>`;
   return `
   <a class="skip-link" href="#main">${t('nav.skip')}</a>
   ${demoBanner()}

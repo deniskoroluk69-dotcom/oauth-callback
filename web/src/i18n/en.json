@@ -125,7 +125,22 @@
     "t2": "We never sell your data or use it for advertising.",
     "t3": "Delete your account and all data in Settings at any time.",
     "ctaBottomTitle": "Get started in a minute",
-    "ctaBottomText": "Free sign-in with Google or email."
+    "ctaBottomText": "Free sign-in with Google or email.",
+    "pv": {
+      "v1": "48.2K",
+      "v2": "1.3M",
+      "v3": "92K",
+      "updated": "updated at 05:00",
+      "acc1": "KnB Business Club",
+      "acc2": "KnB Events",
+      "p1": "How we grew by 10,000 subscribers",
+      "p2": "Behind the scenes of our team",
+      "p3": "Product launch checklist",
+      "p4": "Networking: how to meet people right",
+      "d1": "6.4%",
+      "d2": "18.1%",
+      "d3": "9.7%"
+    }
   },
   "login": {
     "title": "Sign in to KnB Stats",
@@ -204,7 +219,7 @@
       "ok": "Channel connected.",
       "notAdmin": "The bot is not an administrator of this channel yet, or the channel was not found.",
       "invalid": "Enter the name as @channel_name.",
-      "viewsSoon": "Post views — coming soon (separate stage)."
+      "viewsSoon": "Telegram post views will be added in a future update."
     },
     "podcast": {
       "title": "Connect a podcast",
@@ -297,7 +312,7 @@
     "source": "Data source: {name}",
     "sourceYoutube": "Data provided by the YouTube Analytics API",
     "noData": "No data for the selected period.",
-    "tgViews": "Telegram post views — coming soon"
+    "tgViews": "Telegram post views will be added in a future update."
   },
   "settings": {
     "title": "Settings",
@@ -333,7 +348,8 @@
     "send": "Send",
     "sent": "Thank you! Your message has been sent.",
     "invalid": "Please fill in all fields correctly.",
-    "recaptcha": "This form is protected by Firebase App Check (reCAPTCHA Enterprise)."
+    "recaptcha": "This form is protected against spam.",
+    "mailto": "We opened your email app with a ready-made message — just click “Send”."
   },
   "deletion": {
     "statusTitle": "Deletion request status",
@@ -342,7 +358,8 @@
     "completed": "Data deleted",
     "notFound": "No request with this code was found.",
     "receivedAt": "Received",
-    "completedAt": "Completed"
+    "completedAt": "Completed",
+    "byEmail": "To check the status of your request, email {email} and include the code {code}."
   },
   "notFound": {
     "title": "Page not found",

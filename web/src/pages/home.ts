@@ -1,4 +1,4 @@
-import { PLATFORMS, PLATFORM_ORDER } from '@platforms';
+import { PLATFORMS, PLATFORM_ORDER, type PlatformId } from '@platforms';
 import { t } from '../i18n';
 import { href, type Page } from '../router';
 import { ICON, platformIcon } from '../components/icons';
@@ -28,9 +28,9 @@ function heroMock(): string {
   return `
   <div class="mock" aria-hidden="true">
     <div class="mock-kpis">
-      <div class="mock-kpi"><div class="l">${t('dashboard.kpi.followers')}</div><div class="v">48.2K</div><div class="d">+6.4%</div></div>
-      <div class="mock-kpi"><div class="l">${t('dashboard.kpi.views')}</div><div class="v">1.3M</div><div class="d">+18.1%</div></div>
-      <div class="mock-kpi"><div class="l">${t('dashboard.kpi.interactions')}</div><div class="v">92K</div><div class="d">+9.7%</div></div>
+      <div class="mock-kpi"><div class="l">${t('dashboard.kpi.followers')}</div><div class="v">${t('home.pv.v1')}</div><div class="d">▲ ${t('home.pv.d1')}</div></div>
+      <div class="mock-kpi"><div class="l">${t('dashboard.kpi.views')}</div><div class="v">${t('home.pv.v2')}</div><div class="d">▲ ${t('home.pv.d2')}</div></div>
+      <div class="mock-kpi"><div class="l">${t('dashboard.kpi.interactions')}</div><div class="v">${t('home.pv.v3')}</div><div class="d">▲ ${t('home.pv.d3')}</div></div>
     </div>
     <svg viewBox="0 0 520 160" role="img">
       <defs><linearGradient id="hg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--accent)" stop-opacity=".28"/><stop offset="1" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>
@@ -45,34 +45,48 @@ function heroMock(): string {
   </div>`;
 }
 
-/** Плейсхолдери скриншотів кабінету (намальовані SVG, щоб не залежати від зображень). */
-function shot(kind: 1 | 2 | 3): string {
-  const bar = (x: number, w: number, y: number, c = 'var(--bg-muted)') => `<rect x="${x}" y="${y}" width="${w}" height="8" rx="4" fill="${c}"/>`;
-  let body = '';
+/** Мініатюрні превʼю кабінету (живий HTML у стилі сайту — без зображень і заглушок). */
+function preview(kind: 1 | 2 | 3): string {
+  const head = (title: string, meta: string) =>
+    `<div class="pv-head"><span class="pv-logo">${ICON.logo}</span><strong>${title}</strong><span class="pv-meta">${meta}</span></div>`;
   if (kind === 1) {
-    const p = sparkPath(3, 300, 90, 24);
-    body = `
-      <rect x="64" y="14" width="76" height="40" rx="6" fill="var(--bg-muted)"/><rect x="148" y="14" width="76" height="40" rx="6" fill="var(--bg-muted)"/><rect x="232" y="14" width="76" height="40" rx="6" fill="var(--accent-soft)"/>
-      <g transform="translate(64,70)"><path d="${p.area}" fill="var(--accent)" opacity=".15"/><path d="${p.line}" fill="none" stroke="var(--accent)" stroke-width="2"/></g>`;
-  } else if (kind === 2) {
-    const colors = ['#ff0033', '#1877f2', '#e1306c', '#00c2b8'];
-    body = colors
-      .map((c, i) => {
-        const x = 64 + (i % 2) * 124;
-        const y = 14 + Math.floor(i / 2) * 76;
-        return `<rect x="${x}" y="${y}" width="116" height="68" rx="8" fill="var(--bg-muted)"/><rect x="${x + 10}" y="${y + 10}" width="18" height="18" rx="5" fill="${c}"/>${bar(x + 34, 60, y + 15, 'var(--border-strong)')}${bar(x + 10, 50, y + 40, i === 3 ? 'var(--warn-soft)' : 'var(--ok-soft)')}`;
-      })
-      .join('');
-  } else {
-    body = [0, 1, 2, 3, 4]
-      .map((i) => `<rect x="64" y="${16 + i * 30}" width="34" height="22" rx="4" fill="${['#ff0033', '#e1306c', '#1877f2', '#00c2b8', '#7c3aed'][i]}" opacity=".85"/>${bar(106, 120 - i * 10, 23 + i * 30, 'var(--border-strong)')}${bar(270, 36, 23 + i * 30)}`)
-      .join('');
+    const p = sparkPath(3, 300, 80, 24);
+    const kpi = (label: string, value: string, delta: string) =>
+      `<div class="pv-kpi"><span class="pv-label">${label}</span><span class="pv-value">${value}</span><span class="pv-delta up">▲ ${delta}</span></div>`;
+    return `
+      ${head(t('dashboard.title'), t('dashboard.d30'))}
+      <div class="pv-kpis">
+        ${kpi(t('dashboard.kpi.followers'), t('home.pv.v1'), t('home.pv.d1'))}
+        ${kpi(t('dashboard.kpi.views'), t('home.pv.v2'), t('home.pv.d2'))}
+        ${kpi(t('dashboard.kpi.interactions'), t('home.pv.v3'), t('home.pv.d3'))}
+      </div>
+      <svg class="pv-chart" viewBox="0 0 300 80" preserveAspectRatio="none" aria-hidden="true">
+        <defs><linearGradient id="pvg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--accent)" stop-opacity=".25"/><stop offset="1" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>
+        <line x1="0" x2="300" y1="20" y2="20" stroke="var(--chart-grid)"/><line x1="0" x2="300" y1="50" y2="50" stroke="var(--chart-grid)"/>
+        <path d="${p.prev}" fill="none" stroke="var(--chart-prev)" stroke-width="1.5" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"/>
+        <path d="${p.area}" fill="url(#pvg)"/>
+        <path d="${p.line}" fill="none" stroke="var(--accent)" stroke-width="2" vector-effect="non-scaling-stroke"/>
+      </svg>
+      <div class="pv-legend"><span><i style="background:var(--accent)"></i>${t('dashboard.current')}</span><span><i class="dashed"></i>${t('dashboard.previous')}</span></div>`;
   }
-  return `<svg viewBox="0 0 320 170" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-    <rect width="320" height="170" fill="var(--bg)"/>
-    <rect width="52" height="170" fill="var(--bg-elev)"/><rect x="10" y="12" width="32" height="8" rx="4" fill="var(--accent)"/>${bar(10, 30, 34)}${bar(10, 26, 50)}${bar(10, 30, 66)}
-    ${body}
-  </svg>`;
+  if (kind === 2) {
+    const row = (id: PlatformId, account: string, st: 'active' | 'needs_reconnect') =>
+      `<div class="pv-row">${platformIcon(id, 'sm')}<span class="pv-title"><strong>${PLATFORMS[id].name}</strong><span class="pv-sub">${account}</span></span><span class="status status-${st}">${t(`connections.status.${st}`)}</span></div>`;
+    return `
+      ${head(t('connections.title'), t('home.pv.updated'))}
+      ${row('youtube', t('home.pv.acc1'), 'active')}
+      ${row('instagram', '@knb.club', 'active')}
+      ${row('tiktok', '@knb.club', 'active')}
+      ${row('facebook', t('home.pv.acc2'), 'needs_reconnect')}`;
+  }
+  const post = (id: PlatformId, n: number, views: string) =>
+    `<div class="pv-row">${platformIcon(id, 'sm')}<span class="pv-title"><strong>${t(`home.pv.p${n}`)}</strong><span class="pv-sub">${PLATFORMS[id].name}</span></span><span class="pv-num">${views}</span><span class="pv-open" aria-hidden="true">↗</span></div>`;
+  return `
+    ${head(t('dashboard.top'), t('dashboard.col.views'))}
+    ${post('youtube', 1, '72 436')}
+    ${post('instagram', 2, '54 120')}
+    ${post('tiktok', 3, '41 870')}
+    ${post('facebook', 4, '18 305')}`;
 }
 
 export const homePage: Page = {
@@ -138,7 +152,7 @@ export const homePage: Page = {
       <div class="container">
         <div class="section-head"><h2 id="shots-h">${t('home.shotsTitle')}</h2></div>
         <div class="shots">
-          ${([1, 2, 3] as const).map((n) => `<div class="shot"><figure><div class="shot-frame">${shot(n)}</div><figcaption>${t(`home.shot${n}`)}</figcaption></figure></div>`).join('')}
+          ${([1, 2, 3] as const).map((n) => `<div class="shot"><figure><div class="shot-frame pv" role="img" aria-label="${t(`home.shot${n}`)}">${preview(n)}</div><figcaption>${t(`home.shot${n}`)}</figcaption></figure></div>`).join('')}
         </div>
       </div>
     </section>
