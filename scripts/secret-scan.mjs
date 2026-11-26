@@ -20,7 +20,7 @@ const PATTERNS = [
 ];
 
 // Файли, які НЕ потрапляють у git (див. .gitignore) — їх не скануємо.
-const IGNORED = /(^|\/)(node_modules|dist|dist-ssr|lib|\.git|\.firebase|\.emulator-data|\.claude)(\/|$)|(^|\/)\.secret\.local$|(^|\/)\.env(\.(?!example$|demo$)[^/]+)?$/;
+const IGNORED = /^functions\/lib(\/|$)|(^|\/)(node_modules|dist|dist-ssr|\.git|\.firebase|\.emulator-data|\.claude)(\/|$)|(^|\/)\.secret\.local$|(^|\/)\.env(\.(?!example$|demo$)[^/]+)?$/;
 
 function walk(dir, out = []) {
   for (const name of readdirSync(dir)) {
@@ -40,7 +40,7 @@ try {
   files = walk('.'); // ще не git-репозиторій
 }
 
-const skip = /(^|\/)(node_modules|dist|lib)\/|\.(png|jpg|jpeg|gif|webp|woff2?|ico|lock)$|package-lock\.json$|scripts\/secret-scan\.mjs$/;
+const skip = /(^|\/)(node_modules|dist)\/|^functions\/lib\/|\.(png|jpg|jpeg|gif|webp|woff2?|ico|lock)$|package-lock\.json$|scripts\/secret-scan\.mjs$/;
 const findings = [];
 for (const f of files) {
   if (skip.test(f)) continue;
