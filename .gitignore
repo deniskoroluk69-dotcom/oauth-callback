@@ -27,6 +27,9 @@ pubsub-debug.log
 *.key
 *.p12
 *TOKENS*
+# …але не вихідний код (tokenStore.ts, tokens.ts): на Windows правило вище спрацьовує без урахування регістру
+!functions/src/**/*.ts
+!web/src/**/*.ts
 *tokens*.json
 secrets/
 
