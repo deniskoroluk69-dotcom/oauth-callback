@@ -4,8 +4,7 @@
  * Використовується в Privacy Policy (блок у розділі кожної платформи), Terms і Data deletion.
  *
  * Посилання перевірено 2026-11-19. Не вдалося перевірити автоматично (потрібен вхід):
- * Threads Supplemental Terms (help.instagram.com) і сторінку налаштувань LinkedIn —
- * перевірте їх вручну перед поданням.
+ * Threads Supplemental Terms (help.instagram.com) — перевірте вручну перед поданням.
  */
 import { STALE_DATA_DAYS, type PlatformId } from '@platforms';
 import { SITE, botLabel } from '../config/site';
@@ -34,10 +33,6 @@ export const LINKS = {
   tiktokDevTerms: 'https://www.tiktok.com/legal/tik-tok-developer-terms-of-service',
   tiktokTerms: 'https://www.tiktok.com/legal/terms-of-service',
   tiktokPrivacy: 'https://www.tiktok.com/legal/privacy-policy',
-  linkedinApiTerms: 'https://www.linkedin.com/legal/l/api-terms-of-use',
-  linkedinUserAgreement: 'https://www.linkedin.com/legal/user-agreement',
-  linkedinPrivacy: 'https://www.linkedin.com/legal/privacy-policy',
-  linkedinPermitted: 'https://www.linkedin.com/mypreferences/d/data-sharing-for-permitted-services',
   telegramBotTerms: 'https://telegram.org/tos/bot-developers',
   telegramTerms: 'https://telegram.org/tos',
   telegramPrivacy: 'https://telegram.org/privacy',
@@ -182,31 +177,6 @@ function rules(p: RulesPlatform, lang: Lang): Rules {
         ],
         revoke: uk ? 'TikTok → Профіль → Налаштування та конфіденційність → Безпека → Керування дозволами застосунків.' : 'TikTok → Profile → Settings and privacy → Security → Manage app permissions.',
       };
-    case 'linkedin':
-      return {
-        dev: [[LINKS.linkedinApiTerms, 'LinkedIn API Terms of Use']],
-        user: [
-          [LINKS.linkedinUserAgreement, uk ? 'Угода користувача LinkedIn' : 'LinkedIn User Agreement'],
-          [LINKS.linkedinPrivacy, uk ? 'Політика конфіденційності LinkedIn' : 'LinkedIn Privacy Policy'],
-        ],
-        commitments: [
-          ...(uk
-            ? [
-                'Читаємо лише агреговану статистику Сторінок компаній, адміністратором яких ви є. Персональні дані окремих учасників LinkedIn не збираємо.',
-                'З файлу експорту беремо лише денні показники; сам файл не зберігаємо.',
-                'Під час «Відключити» ми відкликаємо токен через API LinkedIn.',
-              ]
-            : [
-                'We only read aggregated statistics of company Pages you administer. We never collect personal data of individual LinkedIn members.',
-                'From an export file we take only daily metrics; the file itself is not stored.',
-                'On “Disconnect” we revoke the token via the LinkedIn API.',
-              ]),
-          ...common,
-        ],
-        revoke: uk
-          ? `LinkedIn → Налаштування → Конфіденційність даних → ${ext(LINKS.linkedinPermitted, 'Дозволені сервіси')} → ${A} → «Видалити».`
-          : `LinkedIn → Settings → Data privacy → ${ext(LINKS.linkedinPermitted, 'Permitted services')} → ${A} → “Remove”.`,
-      };
     case 'telegram':
       return {
         dev: [[LINKS.telegramBotTerms, 'Telegram Bot Platform Developer Terms of Service']],
@@ -229,25 +199,6 @@ function rules(p: RulesPlatform, lang: Lang): Rules {
           ...common,
         ],
         revoke: uk ? `Видаліть ${esc(botLabel('uk', 'acc'))} з адміністраторів каналу (Канал → Адміністратори).` : `Remove ${esc(botLabel('en'))} from channel administrators (Channel → Administrators).`,
-      };
-    case 'podcast':
-      return {
-        dev: [],
-        user: [],
-        commitments: uk
-          ? [
-              'Читаємо лише публічну RSS-стрічку, яку ви вказали. Жодних прав доступу не потрібно.',
-              'Зберігаємо лише назви, дати, тривалість і посилання на епізоди; аудіофайли не завантажуємо. Права на вміст належать власнику подкасту.',
-              'Підключайте лише власний подкаст або той, яким ви уповноважені керувати.',
-              common[2],
-            ]
-          : [
-              'We only read the public RSS feed you provide. No access permissions are needed.',
-              'We store only episode titles, dates, durations and links; audio files are never downloaded. Content rights belong to the podcast owner.',
-              'Connect only a podcast you own or are authorised to manage.',
-              common[2],
-            ],
-        revoke: uk ? '«Мої платформи» → «Відключити».' : '“My platforms” → “Disconnect”.',
       };
   }
 }
@@ -276,7 +227,6 @@ export function termsTable(lang: Lang): string {
     ['Facebook, Instagram', 'meta'],
     ['Threads', 'threads'],
     ['TikTok', 'tiktok'],
-    ['LinkedIn', 'linkedin'],
     ['Telegram', 'telegram'],
   ];
   const head = uk ? ['Платформа', 'Ви погоджуєтеся з', 'Ми дотримуємось'] : ['Platform', 'You agree to', 'We comply with'];
@@ -285,7 +235,5 @@ export function termsTable(lang: Lang): string {
       const r = rules(p, lang);
       return `<tr><td><strong>${name}</strong></td><td>${list(r.user)}</td><td>${list(r.dev)}</td></tr>`;
     })
-    .join('')}<tr><td><strong>${uk ? 'Подкаст (RSS)' : 'Podcast (RSS)'}</strong></td><td colspan="2">${
-    uk ? 'Публічна стрічка; підключайте лише власний подкаст.' : 'Public feed; connect only a podcast you own.'
-  }</td></tr></tbody></table></div>`;
+    .join('')}</tbody></table></div>`;
 }

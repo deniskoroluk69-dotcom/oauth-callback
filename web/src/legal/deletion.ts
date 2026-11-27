@@ -38,7 +38,6 @@ export function deletionHtml(lang: Lang): string {
   <li><strong>Threads:</strong> Налаштування → Акаунт → Вебсайти та застосунки → ${A} → «Видалити».</li>
   <li><strong>Google / YouTube:</strong> ${ext('https://myaccount.google.com/permissions', 'myaccount.google.com/permissions')} → ${A} → «Видалити доступ».</li>
   <li><strong>TikTok:</strong> Налаштування та конфіденційність → Безпека → Керування дозволами застосунків.</li>
-  <li><strong>LinkedIn:</strong> ${ext('https://www.linkedin.com/mypreferences/d/data-sharing-for-permitted-services', 'Налаштування → Дані для дозволених сервісів')}.</li>
   <li><strong>Telegram:</strong> видаліть ${esc(botLabel('uk', 'acc'))} з адміністраторів каналу.</li>
 </ul>
 <p>Після відкликання доступу на боці платформи (крім Meta, де ми отримуємо сповіщення автоматично) збір зупиняється, а підключення позначається «Потрібно перепідключити». Щоб видалити вже зібрану статистику, скористайтеся способом 1 або 2.</p>
@@ -84,7 +83,6 @@ export function deletionHtml(lang: Lang): string {
   <li><strong>Threads:</strong> Settings → Account → Website permissions → ${A} → “Remove”.</li>
   <li><strong>Google / YouTube:</strong> ${ext('https://myaccount.google.com/permissions', 'myaccount.google.com/permissions')} → ${A} → “Remove access”.</li>
   <li><strong>TikTok:</strong> Settings and privacy → Security → Manage app permissions.</li>
-  <li><strong>LinkedIn:</strong> ${ext('https://www.linkedin.com/mypreferences/d/data-sharing-for-permitted-services', 'Settings → Data for permitted services')}.</li>
   <li><strong>Telegram:</strong> remove ${esc(botLabel('en'))} from your channel administrators.</li>
 </ul>
 <p>After you revoke access on the platform side (except Meta, which notifies us automatically), collection stops and the connection is marked “Reconnect required”. To delete statistics already collected, use option 1 or 2.</p>

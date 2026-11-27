@@ -3,9 +3,7 @@ import { collectYouTube, googleProvider } from './google';
 import { collectFacebook, collectInstagram, metaProvider } from './meta';
 import { collectThreads, threadsProvider } from './threads';
 import { collectTikTok, tiktokProvider } from './tiktok';
-import { collectLinkedIn, linkedinProvider } from './linkedin';
 import { collectTelegram } from './telegram';
-import { collectPodcast } from './podcast';
 import type { Collector, OAuthProvider } from './types';
 
 export const PROVIDERS: Record<ProviderId, OAuthProvider> = {
@@ -13,7 +11,6 @@ export const PROVIDERS: Record<ProviderId, OAuthProvider> = {
   meta: metaProvider,
   threads: threadsProvider,
   tiktok: tiktokProvider,
-  linkedin: linkedinProvider,
 };
 
 export const COLLECTORS: Record<PlatformId, Collector> = {
@@ -22,7 +19,5 @@ export const COLLECTORS: Record<PlatformId, Collector> = {
   instagram: collectInstagram,
   threads: collectThreads,
   tiktok: collectTikTok,
-  linkedin: collectLinkedIn,
   telegram: collectTelegram,
-  podcast: collectPodcast,
 };

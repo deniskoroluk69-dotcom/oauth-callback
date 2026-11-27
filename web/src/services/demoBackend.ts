@@ -71,9 +71,7 @@ const PROFILES: Record<PlatformId, Profile0> = {
   instagram: { followers: 21900, views: 9300, reachK: 0.64, interK: 0.068, newK: 0.0045, bd: { reels: 0.61, posts: 0.27, stories: 0.12 } },
   threads: { followers: 4100, views: 3600, interK: 0.08, newK: 0.006 },
   tiktok: { followers: 30500, views: 16800, interK: 0.09, newK: 0.0035 },
-  linkedin: { followers: 2650, views: 1900, interK: 0.04, newK: 0.006, bd: { organic: 0.9, paid: 0.1 } },
   telegram: { followers: 7300, views: 0, interK: 0, newK: 0.004, noViews: true },
-  podcast: { followers: 0, views: 0, interK: 0, newK: 0, noViews: true },
 };
 
 const cache = new Map<string, DailyDoc[]>();
@@ -95,9 +93,8 @@ function series(c: Connection): DailyDoc[] {
     const trend = 1 + i * 0.0035;
     const spike = n2 > 0.94 ? 2.2 + n2 : 1;
     const views = P.noViews ? 0 : Math.round(P.views * scale * week * trend * spike * (0.75 + n * 0.5));
-    const newF = c.platform === 'podcast' ? 0 : Math.max(0, Math.round((views || P.followers * 0.01) * P.newK * (0.6 + n2 * 0.8) * (c.platform === 'telegram' ? 2.5 : 1)));
+    const newF = Math.max(0, Math.round((views || P.followers * 0.01) * P.newK * (0.6 + n2 * 0.8) * (c.platform === 'telegram' ? 2.5 : 1)));
     followers += newF - Math.round(newF * 0.18 * n);
-    if (c.platform === 'podcast') return;
     const row: DailyDoc = { connectionId: c.id, platform: c.platform, date, followers, newFollowers: newF };
     if (!P.noViews) {
       row.views = views;
@@ -134,10 +131,6 @@ const TITLES: Record<string, string[]> = {
 };
 
 function contentFor(c: Connection): ContentDoc[] {
-  if (c.platform === 'telegram' || c.platform === 'linkedin') {
-    // Telegram: пости без переглядів (перегляди — окремий етап); LinkedIn: з експорту лише денні дані.
-    if (c.platform === 'linkedin') return [];
-  }
   const titles = TITLES.uk;
   const out: ContentDoc[] = [];
   const now = Date.now();
@@ -152,7 +145,7 @@ function contentFor(c: Connection): ContentDoc[] {
     const shares = views ? Math.round(views * P.interK * 0.08) : undefined;
     const postId = `${c.externalId}-${i}`;
     const title =
-      c.platform === 'podcast' ? `Епізод ${28 - i}: ${titles[i % titles.length]}` : `${titles[(i + Math.floor(n * 5)) % titles.length]}${c.platform === 'youtube' && n > 0.6 ? ' #shorts' : ''}`;
+      `${titles[(i + Math.floor(n * 5)) % titles.length]}${c.platform === 'youtube' && n > 0.6 ? ' #shorts' : ''}`;
     out.push({
       connectionId: c.id,
       platform: c.platform,
@@ -240,7 +233,7 @@ export function createDemoBackend(): Backend {
       lastManualRefreshAt: null,
       lastError: null,
       expiresAt: platform === 'facebook' || platform === 'instagram' ? now + 88 * 86400000 : platform === 'threads' ? now + 59 * 86400000 : null,
-      source: p.connectKind === 'oauth' ? 'oauth' : p.connectKind,
+      source: p.connectKind,
       ...extra,
     };
     if (existing) Object.assign(existing, base);
@@ -353,31 +346,6 @@ export function createDemoBackend(): Backend {
       emitConns();
       return { title: channel };
     },
-    async connectPodcast(url) {
-      requireUser();
-      await sleep(900);
-      if (/fail/i.test(url)) throw new UserError('connections.podcast.invalid');
-      const host = new URL(url).hostname.replace(/^www\./, '');
-      const title = `Podcast · ${host}`;
-      upsert('podcast', { id: url, name: title, url });
-      save();
-      emitConns();
-      return { title };
-    },
-    async importLinkedIn(file) {
-      requireUser();
-      await sleep(900);
-      let rows = 90;
-      if (/\.csv$/i.test(file.name)) {
-        const text = await file.text();
-        rows = Math.max(0, text.split(/\r?\n/).filter((l) => /\d{1,4}[./-]\d{1,2}[./-]\d{1,4}/.test(l)).length);
-        if (!rows) throw new UserError('connections.linkedin.fail');
-      }
-      upsert('linkedin', { id: 'li_org_demo', name: 'KnB Бізнес-клуб (LinkedIn)', url: 'https://www.linkedin.com/' }, { source: 'upload', expiresAt: null });
-      save();
-      emitConns();
-      return { rows };
-    },
 
     async getDaily(from, to) {
       await sleep(120);
@@ -416,8 +384,6 @@ export function createDemoBackend(): Backend {
         await sleep(600);
         for (const list of Object.values(DEMO_ACCOUNTS)) for (const a of list ?? []) upsert(a.platform, a);
         upsert('telegram', { id: '@knb_club_channel', name: '@knb_club_channel', url: 'https://t.me/knb_club_channel' });
-        upsert('podcast', { id: 'https://example.com/podcast.rss', name: 'KnB Podcast', url: 'https://example.com/podcast.rss' });
-        upsert('linkedin', { id: 'li_org_demo', name: 'KnB Бізнес-клуб (LinkedIn)', url: 'https://www.linkedin.com/' }, { source: 'upload', expiresAt: null });
         save();
         emitConns();
       },

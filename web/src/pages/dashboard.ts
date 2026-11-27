@@ -190,7 +190,7 @@ export const dashboardPage: Page = {
         return { m, cur, prev };
       });
       // Залученість = взаємодії / перегляди лише по днях, де платформа дає обидва показники
-      // (інакше Telegram/подкаст без переглядів спотворюють відсоток).
+      // (інакше Telegram без переглядів спотворює відсоток).
       let erViews = 0;
       let erInter = 0;
       for (const r of rows) {

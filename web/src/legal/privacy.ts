@@ -42,9 +42,7 @@ ${toc([
   ['meta', 'Meta: Facebook та Instagram'],
   ['threads', 'Threads'],
   ['tiktok', 'TikTok'],
-  ['linkedin', 'LinkedIn'],
   ['telegram', 'Telegram'],
-  ['podcast', 'Подкаст (RSS)'],
   ['storage', 'Зберігання та безпека'],
   ['retention', 'Строки зберігання'],
   ['revoke', 'Відкликання доступу та видалення'],
@@ -139,26 +137,12 @@ ${table(H, [
 
 ${rulesBlock('tiktok', 'uk')}
 
-<h2 id="linkedin">9. LinkedIn</h2>
-<p>Пряме підключення через LinkedIn Community Management API (права <code>r_organization_admin</code>, <code>r_organization_social</code>) — для читання статистики Сторінок компаній, адміністратором яких ви є. До схвалення доступу ви можете завантажити файл експорту аналітики Сторінки (.xlsx, .xls, .csv): ми розбираємо з нього лише денні агреговані показники (покази, кліки, реакції, коментарі, репости, підписники), а сам файл не зберігаємо.</p>
-${table(H, [
-  ['<code>r_organization_admin</code>', 'Перелік Сторінок, де ви адміністратор; статистика підписників і переглядів Сторінки', 'Графіки по днях'],
-  ['<code>r_organization_social</code>', 'Дописи Сторінки та їхні показники', 'Топ публікацій'],
-])}
-
-${rulesBlock('linkedin', 'uk')}
-
-<h2 id="telegram">10. Telegram</h2>
+<h2 id="telegram">9. Telegram</h2>
 <p>Telegram підключається без OAuth: ви додаєте нашого бота адміністратором свого каналу <strong>без прав на публікацію</strong>. Бот читає: назву та @username каналу, кількість підписників (щодня) і нові дописи каналу (текст перших рядків, дата, посилання). Щоб відключити — видаліть бота з адміністраторів або натисніть «Відключити» в кабінеті.</p>
 
 ${rulesBlock('telegram', 'uk')}
 
-<h2 id="podcast">11. Подкаст (RSS)</h2>
-<p>Ми щодня читаємо публічну RSS-стрічку, яку ви вказали: назву подкасту, перелік епізодів, дати, тривалість і посилання. Жодних прав доступу не потрібно.</p>
-
-${rulesBlock('podcast', 'uk')}
-
-<h2 id="storage">12. Зберігання та безпека</h2>
+<h2 id="storage">10. Зберігання та безпека</h2>
 <ul>
   <li>Дані зберігаються в Google Cloud / Firebase (Firestore, Cloud Functions) у регіоні <strong>europe-west1 (Бельгія, ЄС)</strong>.</li>
   <li>Токени доступу шифруються на сервері за схемою envelope encryption: кожен набір токенів шифрується окремим ключем AES-256-GCM, який, у свою чергу, зашифрований ключем у Google Cloud KMS. Колекція з токенами повністю закрита для доступу з браузера.</li>
@@ -167,7 +151,7 @@ ${rulesBlock('podcast', 'uk')}
   <li>Google як постачальник хостингу може обробляти дані за межами ЄС; такі передачі захищені стандартними договірними положеннями ЄС (SCC) згідно з умовами обробки даних Google Cloud.</li>
 </ul>
 
-<h2 id="retention">13. Строки зберігання</h2>
+<h2 id="retention">11. Строки зберігання</h2>
 ${table(['Дані', 'Скільки зберігаємо'], [
   ['Токени доступу', 'Доки платформа підключена. Видаляються одразу після відключення.'],
   ['Статистика й публікації', 'Доки існує ваш акаунт або доки підключена платформа.'],
@@ -178,28 +162,28 @@ ${table(['Дані', 'Скільки зберігаємо'], [
 ])}
 <p>Після відключення платформи, видалення акаунта або запиту на видалення ми видаляємо відповідні дані <strong>протягом 7 днів</strong> (зазвичай — одразу).</p>
 
-<h2 id="revoke">14. Відкликання доступу та видалення даних</h2>
+<h2 id="revoke">12. Відкликання доступу та видалення даних</h2>
 <ul>
   <li><strong>У кабінеті:</strong> «Мої платформи» → «Відключити» — ми відкликаємо токен на платформі (де є така можливість) і видаляємо токени та статистику цієї платформи.</li>
   <li><strong>Увесь акаунт:</strong> «Налаштування» → «Видалити акаунт і всі дані».</li>
-  <li><strong>На боці платформи:</strong> ${ext('https://myaccount.google.com/permissions', 'Google')}, ${ext('https://www.facebook.com/settings?tab=business_tools', 'Facebook / Instagram')}, ${ext('https://www.threads.net/settings/account', 'Threads')}, ${ext('https://www.tiktok.com/setting/security', 'TikTok')}, ${ext('https://www.linkedin.com/mypreferences/d/data-sharing-for-permitted-services', 'LinkedIn')}.</li>
+  <li><strong>На боці платформи:</strong> ${ext('https://myaccount.google.com/permissions', 'Google')}, ${ext('https://www.facebook.com/settings?tab=business_tools', 'Facebook / Instagram')}, ${ext('https://www.threads.net/settings/account', 'Threads')}, ${ext('https://www.tiktok.com/setting/security', 'TikTok')}.</li>
   <li><strong>Сторінка</strong> <a href="/uk/data-deletion">Видалення даних</a> або лист на ${MAIL}.</li>
 </ul>
 <p>Строк виконання — до 7 днів.</p>
 
-<h2 id="rights">15. Ваші права</h2>
+<h2 id="rights">13. Ваші права</h2>
 <p>Відповідно до GDPR і Закону України «Про захист персональних даних» ви маєте право: отримати доступ до своїх даних і їхню копію; виправити неточні дані; видалити дані; обмежити обробку чи заперечити проти неї; на перенесення даних; відкликати згоду в будь-який момент; подати скаргу до наглядового органу (в Україні — Уповноважений Верховної Ради з прав людини; в ЄС — орган захисту даних вашої країни). Щоб скористатися правами, напишіть на ${MAIL} — ми відповімо протягом 30 днів.</p>
 
-<h2 id="cookies">16. Файли cookie та локальне сховище</h2>
+<h2 id="cookies">14. Файли cookie та локальне сховище</h2>
 <p>Ми не використовуємо рекламні чи аналітичні cookie. Використовуємо лише необхідне: сесію входу Firebase (локальне сховище браузера), збережені мову й тему, службовий cookie <code>__session</code> на 10 хвилин під час підключення платформи (захист від підробки запитів), а також Firebase App Check / reCAPTCHA для захисту форм від спаму.</p>
 
-<h2 id="children">17. Діти</h2>
+<h2 id="children">15. Діти</h2>
 <p>Сервіс не призначений для осіб, молодших за 16 років, і ми свідомо не збираємо їхні дані.</p>
 
-<h2 id="changes">18. Зміни політики</h2>
+<h2 id="changes">16. Зміни політики</h2>
 <p>Ми можемо оновлювати цю політику. Дата «Оновлено» вгорі показує останню редакцію. Про суттєві зміни повідомимо листом або в кабінеті заздалегідь.</p>
 
-<h2 id="contact">19. Контакти</h2>
+<h2 id="contact">17. Контакти</h2>
 <p>${C}${ADDR ? `, ${ADDR}` : ''}. Пошта: ${MAIL}. Також можна скористатися <a href="/uk/contact">формою контактів</a>.</p>
 <p class="faint">Англомовна версія: <a href="/en/privacy">Privacy Policy (English)</a>.</p>`;
 }
@@ -220,9 +204,7 @@ ${toc([
   ['meta', 'Meta: Facebook and Instagram'],
   ['threads', 'Threads'],
   ['tiktok', 'TikTok'],
-  ['linkedin', 'LinkedIn'],
   ['telegram', 'Telegram'],
-  ['podcast', 'Podcast (RSS)'],
   ['storage', 'Storage and security'],
   ['retention', 'Retention'],
   ['revoke', 'Revoking access and deleting data'],
@@ -317,26 +299,12 @@ ${table(H, [
 
 ${rulesBlock('tiktok', 'en')}
 
-<h2 id="linkedin">9. LinkedIn</h2>
-<p>Direct connection via the LinkedIn Community Management API (permissions <code>r_organization_admin</code>, <code>r_organization_social</code>) — to read statistics of company Pages you administer. Until access is approved, you can upload your Page analytics export file (.xlsx, .xls, .csv): we extract only daily aggregated metrics (impressions, clicks, reactions, comments, reposts, followers) and do not keep the file itself.</p>
-${table(H, [
-  ['<code>r_organization_admin</code>', 'Pages you administer; Page follower and view statistics', 'Daily charts'],
-  ['<code>r_organization_social</code>', 'Page posts and their metrics', 'Top posts'],
-])}
-
-${rulesBlock('linkedin', 'en')}
-
-<h2 id="telegram">10. Telegram</h2>
+<h2 id="telegram">9. Telegram</h2>
 <p>Telegram is connected without OAuth: you add our bot as an administrator of your channel <strong>with no posting rights</strong>. The bot reads: channel title and @username, subscriber count (daily) and new channel posts (first lines of text, date, link). To disconnect, remove the bot from administrators or click “Disconnect” in your dashboard.</p>
 
 ${rulesBlock('telegram', 'en')}
 
-<h2 id="podcast">11. Podcast (RSS)</h2>
-<p>We read the public RSS feed you provide once a day: podcast title, list of episodes, dates, duration and links. No access permissions are needed.</p>
-
-${rulesBlock('podcast', 'en')}
-
-<h2 id="storage">12. Storage and security</h2>
+<h2 id="storage">10. Storage and security</h2>
 <ul>
   <li>Data is stored in Google Cloud / Firebase (Firestore, Cloud Functions) in the <strong>europe-west1 (Belgium, EU)</strong> region.</li>
   <li>Access tokens are encrypted on the server using envelope encryption: each token set is encrypted with its own AES-256-GCM key, which in turn is encrypted with a key in Google Cloud KMS. The token collection is completely closed to browser access.</li>
@@ -345,7 +313,7 @@ ${rulesBlock('podcast', 'en')}
   <li>As our hosting provider, Google may process data outside the EU; such transfers are protected by the EU Standard Contractual Clauses (SCCs) under the Google Cloud data processing terms.</li>
 </ul>
 
-<h2 id="retention">13. Retention</h2>
+<h2 id="retention">11. Retention</h2>
 ${table(['Data', 'How long we keep it'], [
   ['Access tokens', 'While the platform is connected. Deleted immediately on disconnect.'],
   ['Statistics and posts', 'While your account exists or while the platform is connected.'],
@@ -356,28 +324,28 @@ ${table(['Data', 'How long we keep it'], [
 ])}
 <p>After you disconnect a platform, delete your account or submit a deletion request, we delete the relevant data <strong>within 7 days</strong> (usually immediately).</p>
 
-<h2 id="revoke">14. Revoking access and deleting data</h2>
+<h2 id="revoke">12. Revoking access and deleting data</h2>
 <ul>
   <li><strong>In your dashboard:</strong> “My platforms” → “Disconnect” — we revoke the token on the platform (where supported) and delete that platform's tokens and statistics.</li>
   <li><strong>Whole account:</strong> “Settings” → “Delete account and all data”.</li>
-  <li><strong>On the platform side:</strong> ${ext('https://myaccount.google.com/permissions', 'Google')}, ${ext('https://www.facebook.com/settings?tab=business_tools', 'Facebook / Instagram')}, ${ext('https://www.threads.net/settings/account', 'Threads')}, ${ext('https://www.tiktok.com/setting/security', 'TikTok')}, ${ext('https://www.linkedin.com/mypreferences/d/data-sharing-for-permitted-services', 'LinkedIn')}.</li>
+  <li><strong>On the platform side:</strong> ${ext('https://myaccount.google.com/permissions', 'Google')}, ${ext('https://www.facebook.com/settings?tab=business_tools', 'Facebook / Instagram')}, ${ext('https://www.threads.net/settings/account', 'Threads')}, ${ext('https://www.tiktok.com/setting/security', 'TikTok')}.</li>
   <li><strong>The</strong> <a href="/en/data-deletion">Data Deletion</a> page or an email to ${MAIL}.</li>
 </ul>
 <p>Requests are completed within 7 days.</p>
 
-<h2 id="rights">15. Your rights</h2>
+<h2 id="rights">13. Your rights</h2>
 <p>Under the GDPR and the Law of Ukraine “On Personal Data Protection” you have the right to: access your data and get a copy; rectify inaccurate data; erase your data; restrict or object to processing; data portability; withdraw consent at any time; lodge a complaint with a supervisory authority (in Ukraine — the Ukrainian Parliament Commissioner for Human Rights; in the EU — the data protection authority of your country). To exercise your rights, email ${MAIL} — we reply within 30 days.</p>
 
-<h2 id="cookies">16. Cookies and local storage</h2>
+<h2 id="cookies">14. Cookies and local storage</h2>
 <p>We do not use advertising or analytics cookies. We only use what is necessary: the Firebase sign-in session (browser local storage), your saved language and theme, a 10-minute service cookie <code>__session</code> while you connect a platform (cross-site request forgery protection), and Firebase App Check / reCAPTCHA to protect forms from spam.</p>
 
-<h2 id="children">17. Children</h2>
+<h2 id="children">15. Children</h2>
 <p>The Service is not intended for people under 16, and we do not knowingly collect their data.</p>
 
-<h2 id="changes">18. Changes to this policy</h2>
+<h2 id="changes">16. Changes to this policy</h2>
 <p>We may update this policy. The “Last updated” date at the top shows the latest version. We will notify you of material changes in advance by email or in your dashboard.</p>
 
-<h2 id="contact">19. Contact</h2>
+<h2 id="contact">17. Contact</h2>
 <p>${C}${ADDR ? `, ${ADDR}` : ''}. Email: ${MAIL}. You can also use the <a href="/en/contact">contact form</a>.</p>
 <p class="faint">Ukrainian version: <a href="/uk/privacy">Політика конфіденційності (українською)</a>.</p>`;
 }

@@ -13,8 +13,6 @@ export async function dispatchDaily() {
   const snap = await db().collectionGroup('connections').where('status', 'in', ['active', 'error']).get();
   let i = 0;
   for (const d of snap.docs) {
-    const c = d.data() as StoredConnection;
-    if (c.source === 'upload') continue;
     const uid = d.ref.parent.parent!.id;
     // Розподіляємо старт рівномірно (до ~30 хв), щоб не впертися в ліміти API.
     await enqueueSync({ uid, connectionId: d.id, reason: 'daily' }, Math.min(1800, i * 2)).catch((e) => log.error('enqueue failed', errInfo(e)));
@@ -29,7 +27,6 @@ export async function dispatchDaily() {
  * Видаляє дані підключень, які не вдалося оновити STALE_DATA_DAYS днів
  * (доступ відкликано, токен прострочено). Запис підключення лишається зі статусом
  * «disconnected», щоб користувач бачив кнопку «Підключити знову».
- * Імпорт LinkedIn (source=upload) не оновлюється автоматично — його не чіпаємо.
  */
 export async function purgeStale(now = Date.now()): Promise<number> {
   const cutoff = now - STALE_DATA_DAYS * 86400000;
@@ -37,7 +34,6 @@ export async function purgeStale(now = Date.now()): Promise<number> {
   let purged = 0;
   for (const d of snap.docs) {
     const c = d.data() as StoredConnection;
-    if (c.source === 'upload') continue;
     const last = c.lastSyncAt ?? c.connectedAt ?? 0;
     if (last > cutoff) continue;
     await deleteConnection(d.ref.parent.parent!.id, d.id, { revoke: false, keepDoc: true }).catch((e) => log.error('purge failed', errInfo(e)));

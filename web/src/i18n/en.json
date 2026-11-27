@@ -2,7 +2,7 @@
   "meta": {
     "home": {
       "title": "KnB Stats — all your social media statistics in one place",
-      "description": "Connect YouTube, Facebook, Instagram, Threads, TikTok, LinkedIn, Telegram and your podcast and get daily statistics for your own channels. Read-only — we never post anything."
+      "description": "Connect YouTube, Facebook, Instagram, Threads, TikTok and Telegram and get daily statistics for your own channels. Read-only — we never post anything."
     },
     "privacy": {
       "title": "Privacy Policy — KnB Stats",
@@ -94,12 +94,12 @@
   "home": {
     "badge": "Read-only · we never post",
     "title": "Statistics for all your channels — in one place",
-    "subtitle": "KnB Stats collects daily metrics of your own pages and channels on YouTube, Facebook, Instagram, Threads, TikTok, LinkedIn, Telegram and your podcast, and shows them on one clear dashboard.",
+    "subtitle": "KnB Stats collects daily metrics of your own pages and channels on YouTube, Facebook, Instagram, Threads, TikTok and Telegram, and shows them on one clear dashboard.",
     "ctaLogin": "Sign in and connect",
     "ctaHow": "How it works",
     "readOnly": "We request read-only access to statistics. The service never posts, deletes or changes anything in your accounts.",
     "featuresTitle": "Why KnB Stats",
-    "f1t": "One dashboard instead of eight",
+    "f1t": "One dashboard instead of six",
     "f1d": "Followers, views, reach and engagement from every platform side by side, measured the same way.",
     "f2t": "Automatic daily updates",
     "f2d": "Every morning at 05:00 Kyiv time the server collects fresh numbers. No manual exports.",
@@ -140,6 +140,32 @@
       "d1": "6.4%",
       "d2": "18.1%",
       "d3": "9.7%"
+    },
+    "live": {
+      "label": "Live",
+      "sync": "syncing",
+      "now": "just now",
+      "t1": "+124 new followers",
+      "t2": "+3.2K views",
+      "t3": "New channel post",
+      "t4": "+58 likes",
+      "t5": "Reach +12%",
+      "t6": "+31 replies"
+    },
+    "ticker": {
+      "k1": "+12K views in a day",
+      "k2": "a reel reached 54K views",
+      "k3": "+860 followers this week",
+      "k4": "Page reach +18%",
+      "k5": "+240 channel subscribers",
+      "k6": "a post got 1.1K likes"
+    },
+    "stats": {
+      "title": "KnB Stats in numbers",
+      "s1": "platforms in one dashboard",
+      "s2": "daily update, Kyiv time",
+      "s3": "days of history right after connecting",
+      "s4": "posts on your behalf — ever"
     }
   },
   "login": {
@@ -220,23 +246,6 @@
       "notAdmin": "The bot is not an administrator of this channel yet, or the channel was not found.",
       "invalid": "Enter the name as @channel_name.",
       "viewsSoon": "Telegram post views will be added in a future update."
-    },
-    "podcast": {
-      "title": "Connect a podcast",
-      "text": "Paste the link to your podcast RSS feed.",
-      "placeholder": "https://example.com/podcast.rss",
-      "add": "Verify and connect",
-      "invalid": "This does not look like a valid podcast RSS feed.",
-      "ok": "Podcast “{title}” connected."
-    },
-    "linkedin": {
-      "title": "LinkedIn analytics import",
-      "text": "While API access is under review by LinkedIn, upload your page analytics export (.xlsx, .xls or .csv): Page → Analytics → Export.",
-      "upload": "Upload export",
-      "ok": "Imported {rows} days of statistics.",
-      "fail": "Could not read the file. Please upload the original LinkedIn export.",
-      "tooBig": "File too large (5 MB max).",
-      "oauthSoon": "Direct connection — coming soon"
     },
     "demo": {
       "title": "Demo tools",

@@ -8,8 +8,6 @@ import { deleteConnection, deleteUserData, saveConnection } from '../lib/connect
 import { enqueueSync } from '../sync/enqueue';
 import { confirmPending } from '../connect/handler';
 import { verifyChannel } from '../platforms/telegram';
-import { loadFeed } from '../platforms/podcast';
-import { parseLinkedInExport } from '../platforms/linkedin';
 
 /** Лише авторизований користувач з підтвердженою поштою (для входу паролем). */
 function requireUser(req: CallableRequest): string {
@@ -108,47 +106,6 @@ export const handlers = {
       );
       await enqueueSync({ uid, connectionId: id, backfill: true, reason: 'connect' });
       return { title: ch.title };
-    });
-  },
-
-  async connectPodcast(req: CallableRequest<{ rssUrl?: string }>) {
-    const uid = requireUser(req);
-    if (!PLATFORMS.podcast.enabled) throw new HttpsError('failed-precondition', 'connections.soonText');
-    return guard('connectPodcast', async () => {
-      const url = str(req.data?.rssUrl, 2000);
-      const feed = await loadFeed(url);
-      const id = await saveConnection(uid, { platform: 'podcast', externalId: url, name: feed.title, url: feed.link ?? url }, { provider: null, scopes: [], source: 'rss' });
-      await enqueueSync({ uid, connectionId: id, backfill: true, reason: 'connect' });
-      return { title: feed.title };
-    });
-  },
-
-  async importLinkedIn(req: CallableRequest<{ fileName?: string; base64?: string }>) {
-    const uid = requireUser(req);
-    return guard('importLinkedIn', async () => {
-      const b64 = str(req.data?.base64, 7_500_000);
-      const name = str(req.data?.fileName, 200);
-      if (!/\.(xlsx|xls|csv)$/i.test(name)) throw new UserFacingError('connections.linkedin.fail');
-      const buf = Buffer.from(b64, 'base64');
-      if (buf.length > 5 * 1024 * 1024) throw new UserFacingError('connections.linkedin.tooBig');
-      let rows;
-      try {
-        rows = parseLinkedInExport(buf);
-      } catch {
-        throw new UserFacingError('connections.linkedin.fail');
-      }
-      // Один «імпортований» акаунт LinkedIn на користувача (назву можна змінити повторним імпортом).
-      const externalId = `upload:${sha256(uid).slice(0, 12)}`;
-      const id = await saveConnection(
-        uid,
-        { platform: 'linkedin', externalId, name: name.replace(/\.(xlsx|xls|csv)$/i, '').slice(0, 80) || 'LinkedIn', expiresAt: null },
-        { provider: null, scopes: [], source: 'upload' },
-      );
-      const writer = db().bulkWriter();
-      for (const r of rows) writer.set(db().doc(`users/${uid}/daily/${id}_${r.date}`), { ...r, connectionId: id, platform: 'linkedin', updatedAt: Date.now() }, { merge: true });
-      await writer.close();
-      await db().doc(`users/${uid}/connections/${id}`).set({ lastSyncAt: Date.now() }, { merge: true });
-      return { rows: rows.length };
     });
   },
 

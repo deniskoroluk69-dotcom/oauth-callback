@@ -1,6 +1,6 @@
 # KnB Stats
 
-Сайт, через який користувач сам підключає свої соцмережі (YouTube, Facebook, Instagram, Threads, TikTok, LinkedIn, Telegram, подкаст), а сервер автоматично отримує, зберігає (зашифровано) й продовжує токени та щодня о 05:00 за Києвом збирає статистику.
+Сайт, через який користувач сам підключає свої соцмережі (YouTube, Facebook, Instagram, Threads, TikTok, Telegram), а сервер автоматично отримує, зберігає (зашифровано) й продовжує токени та щодня о 05:00 за Києвом збирає статистику.
 
 - **Сайт:** Vite + TypeScript (без фреймворків), **GitHub Pages** на `kdstatsforme.pp.ua`, пререндер усіх сторінок (`/uk/...`, `/en/...`).
 - **API:** Firebase Hosting на піддомені `api.kdstatsforme.pp.ua` (лише `/connect/**` і `/hooks/**` → Cloud Functions).
@@ -29,7 +29,7 @@ npm run install:all
 npm run dev:demo
 ```
 
-Відкрийте http://localhost:5173 — усе працює в браузері на тестових даних: вхід, «Мої платформи» (імітація сторінок дозволу, вибір каналів/Сторінок, Telegram, RSS, імпорт LinkedIn), дашборд, налаштування, видалення акаунта. У демо на сторінці «Мої платформи» є «Інструменти демо»: імітувати нічний збір і прострочений токен. Статус запиту Meta на видалення: `/uk/data-deletion?code=DEMO123` (або `PENDING1`, `NOTFOUND1`).
+Відкрийте http://localhost:5173 — усе працює в браузері на тестових даних: вхід, «Мої платформи» (імітація сторінок дозволу, вибір каналів/Сторінок, Telegram), дашборд, налаштування, видалення акаунта. У демо на сторінці «Мої платформи» є «Інструменти демо»: імітувати нічний збір і прострочений токен. Статус запиту Meta на видалення: `/uk/data-deletion?code=DEMO123` (або `PENDING1`, `NOTFOUND1`).
 
 ---
 
@@ -87,8 +87,6 @@ firebase functions:secrets:set TIKTOK_CLIENT_KEY
 firebase functions:secrets:set TIKTOK_CLIENT_SECRET
 firebase functions:secrets:set TIKTOK_SANDBOX_CLIENT_KEY
 firebase functions:secrets:set TIKTOK_SANDBOX_CLIENT_SECRET
-firebase functions:secrets:set LINKEDIN_CLIENT_ID
-firebase functions:secrets:set LINKEDIN_CLIENT_SECRET
 firebase functions:secrets:set TELEGRAM_BOT_TOKEN
 firebase functions:secrets:set TELEGRAM_WEBHOOK_SECRET
 ```
@@ -187,7 +185,6 @@ git push origin main
 | Meta callback | `https://api.kdstatsforme.pp.ua/connect/meta/callback` |
 | Threads callback | `https://api.kdstatsforme.pp.ua/connect/threads/callback` |
 | TikTok callback | `https://api.kdstatsforme.pp.ua/connect/tiktok/callback` |
-| LinkedIn callback | `https://api.kdstatsforme.pp.ua/connect/linkedin/callback` |
 | Meta Deauthorize callback | `https://api.kdstatsforme.pp.ua/hooks/meta/deauthorize` |
 | Meta Data deletion request URL | `https://api.kdstatsforme.pp.ua/hooks/meta/data-deletion` |
 | Threads Uninstall callback | `https://api.kdstatsforme.pp.ua/hooks/threads/uninstall` |
@@ -220,11 +217,6 @@ git push origin main
 4. **Sandbox:** створіть sandbox, додайте тестові акаунти; ключі sandbox → `TIKTOK_SANDBOX_CLIENT_KEY/SECRET`; у `functions/src/config/platforms.ts` `TIKTOK_ENV = 'sandbox'`.
 5. **Submit for review** з відео. Після схвалення: production-ключі → `TIKTOK_CLIENT_KEY/SECRET`, `TIKTOK_ENV = 'production'`, деплой.
 
-### LinkedIn
-1. **linkedin.com/developers → Create app**, прив'яжіть Сторінку компанії й підтвердіть її (Verify).
-2. **Auth:** Authorized redirect URL `https://api.kdstatsforme.pp.ua/connect/linkedin/callback`. Client ID/Secret → `LINKEDIN_CLIENT_ID/SECRET`.
-3. **Products → Community Management API → Request access** (заповнити анкету про використання — лише читання аналітики Сторінок; права `r_organization_admin`, `r_organization_social`).
-4. До схвалення працює **імпорт експорту** аналітики (кнопка «Завантажити експорт» у кабінеті).
 
 ### Telegram
 1. У **@BotFather**: `/newbot` → назва `KnB Stats`, username `[BOT_USERNAME]` → токен → секрет `TELEGRAM_BOT_TOKEN` (вводите самі в терміналі).
@@ -264,7 +256,6 @@ curl -s "https://api.telegram.org/bot<TOKEN>/setWebhook" -d "url=https://api.kds
 
 **TikTok:** Web-платформа з робочим Website URL; Terms і Privacy на тому ж домені; відео з sandbox-акаунтом; описано кожен scope.
 
-**LinkedIn:** Сторінка компанії підтверджена; анкета Community Management API описує лише читання аналітики.
 
 ### Сценарій відео-демонстрації (англійською)
 
@@ -303,6 +294,6 @@ curl -s "https://api.telegram.org/bot<TOKEN>/setWebhook" -d "url=https://api.kds
 - **Підключення:** `POST https://api…/connect/{provider}/start` з сайту (Firebase ID token, App Check, CORS лише для домену сайту) → state у `oauthStates/{sha256}` (10 хв, uid, PKCE для Google) + одноразовий квиток → браузер відкриває `/connect/{provider}/go` (cookie `__session` з nonce на домені API) → сторінка дозволу → `GET /connect/{provider}/callback` → одноразове споживання state + перевірка cookie → обмін коду → (Meta/Threads) довгостроковий токен → акаунти → кілька? → `pendingSelections` (зашифровано) і вибір у кабінеті → `secrets/{connectionId}` (AES-256-GCM, DEK загорнутий KMS, AAD = connectionId) + `users/{uid}/connections/{id}` → одразу завдання збору з історією.
 - **Збір:** `dispatchDaily` (05:00 Europe/Kyiv) → Cloud Tasks `syncConnection` (5 спроб, експоненційна затримка, ліміт 2/с) → блокування `lockUntil` → оновлення токена й негайний запис (TikTok ротує) → дані → `users/{uid}/daily/{connectionId}_{YYYY-MM-DD}`, `users/{uid}/content/{connectionId}_{postId}` → зняття блокування. AuthError → `needs_reconnect` + лист. `nightlyReport` — лог-метрика `sync_failure_rate` + лист адміну, якщо > 20% збоїв платформи.
 - **Видалення:** «Відключити», «Видалити акаунт», Meta/Threads hooks — токени й дані видаляються одразу (обіцянка в політиці — ≤ 7 днів).
-- **Безпека:** суворий CSP, HSTS, `X-Frame-Options: DENY`, App Check на callable-функціях, правила Firestore (клієнт читає лише свої `users/{uid}/**`, `secrets/**` закрито повністю), редагування секретів у логах (`lib/log.ts`), захист від SSRF для RSS.
+- **Безпека:** суворий CSP, HSTS, `X-Frame-Options: DENY`, App Check на callable-функціях, правила Firestore (клієнт читає лише свої `users/{uid}/**`, `secrets/**` закрито повністю), редагування секретів у логах (`lib/log.ts`).
 
 > Відомі обмеження прототипу: Meta регулярно змінює набір метрик Insights — перелік винесено в константи `functions/src/platforms/meta.ts`; перед поданням звірте з актуальною документацією Graph API. Перегляди постів Telegram (MTProto) — окремий етап, у кабінеті показано заготовку «Скоро».

@@ -67,8 +67,6 @@ export interface Backend {
   disconnect(connectionId: string): Promise<void>;
   refreshNow(connectionId: string): Promise<{ queued: boolean; retryInMinutes?: number }>;
   connectTelegram(channel: string): Promise<{ title: string }>;
-  connectPodcast(rssUrl: string): Promise<{ title: string }>;
-  importLinkedIn(file: File): Promise<{ rows: number }>;
 
   getDaily(from: string, to: string): Promise<DailyDoc[]>;
   getContent(from: string, to: string): Promise<ContentDoc[]>;

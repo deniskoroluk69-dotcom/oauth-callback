@@ -206,13 +206,6 @@ export function createFirebaseBackend(): Backend {
     disconnect: (connectionId) => call('disconnectConnection', { connectionId }),
     refreshNow: (connectionId) => call('refreshNow', { connectionId }),
     connectTelegram: (channel) => call('connectTelegram', { channel }),
-    connectPodcast: (rssUrl) => call('connectPodcast', { rssUrl }),
-    async importLinkedIn(file) {
-      const buf = new Uint8Array(await file.arrayBuffer());
-      let bin = '';
-      for (let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode(...buf.subarray(i, i + 0x8000));
-      return call('importLinkedIn', { fileName: file.name, base64: btoa(bin) });
-    },
 
     async getDaily(from, to) {
       const q = query(collection(db, 'users', uid(), 'daily'), where('date', '>=', from), where('date', '<=', to));

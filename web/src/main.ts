@@ -1,5 +1,6 @@
 import './styles/main.css';
 import './styles/motion.css';
+import './styles/live.css';
 import { isLang, preferredLang, rememberLang, setLang, type Lang } from './i18n';
 import { applyTheme, effectiveTheme, getTheme, toggleTheme } from './lib/theme';
 import { href, type Ctx } from './router';

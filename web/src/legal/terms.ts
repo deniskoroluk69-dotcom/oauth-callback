@@ -23,7 +23,7 @@ function uk(date: string): string {
 <p>Ці Умови регулюють використання сервісу <strong>${A}</strong> (далі — «Сервіс»), який надає ${C}${ADDR ? ` (${ADDR})` : ''}. Створюючи акаунт або користуючись Сервісом, ви погоджуєтеся з цими Умовами та з <a href="/uk/privacy">Політикою конфіденційності</a>.</p>
 
 <h2>1. Опис Сервісу</h2>
-<p>Сервіс дозволяє підключити ваші власні акаунти в YouTube, Facebook, Instagram, Threads, TikTok, LinkedIn, Telegram і подкаст (RSS) та переглядати їхню статистику в одному кабінеті. Сервіс <strong>лише читає</strong> статистику за наданими вами правами й нічого не публікує, не видаляє і не змінює у ваших акаунтах.</p>
+<p>Сервіс дозволяє підключити ваші власні акаунти в YouTube, Facebook, Instagram, Threads, TikTok і Telegram та переглядати їхню статистику в одному кабінеті. Сервіс <strong>лише читає</strong> статистику за наданими вами правами й нічого не публікує, не видаляє і не змінює у ваших акаунтах.</p>
 
 <h2>2. Акаунт</h2>
 <ul>
@@ -92,7 +92,7 @@ function en(date: string): string {
 <p>These Terms govern your use of <strong>${A}</strong> (the “Service”), provided by ${C}${ADDR ? ` (${ADDR})` : ''}. By creating an account or using the Service you agree to these Terms and to our <a href="/en/privacy">Privacy Policy</a>.</p>
 
 <h2>1. Description of the Service</h2>
-<p>The Service lets you connect your own YouTube, Facebook, Instagram, Threads, TikTok, LinkedIn, Telegram and podcast (RSS) accounts and view their statistics in one dashboard. The Service <strong>only reads</strong> statistics using the permissions you grant and never posts, deletes or changes anything in your accounts.</p>
+<p>The Service lets you connect your own YouTube, Facebook, Instagram, Threads, TikTok and Telegram accounts and view their statistics in one dashboard. The Service <strong>only reads</strong> statistics using the permissions you grant and never posts, deletes or changes anything in your accounts.</p>
 
 <h2>2. Your account</h2>
 <ul>

@@ -108,13 +108,13 @@ const cookie = (r.headers.get('set-cookie') ?? '').split(';')[0];
 r = await fetch(`${HOST}/connect/google/callback?state=${encodeURIComponent(st2)}&error=access_denied`, { redirect: 'manual', headers: { Cookie: cookie } });
 ok(r.headers.get('location') === 'http://localhost:5173/uk/app/connections?error=denied', 'відмова → повернення на сайт /uk/app/connections?error=denied');
 
-// 6. Вимкнена платформа (LinkedIn) → 400
-r = await fetch(`${HOST}/connect/linkedin/start`, {
+// 6. Невідома / непідтримувана платформа → 404
+r = await fetch(`${HOST}/connect/myspace/start`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${signIn.idToken}` },
-  body: JSON.stringify({ platform: 'linkedin' }),
+  body: JSON.stringify({ platform: 'myspace' }),
 });
-ok(r.status === 400, `вимкнена платформа відхиляється (${r.status})`);
+ok(r.status === 404, `непідтримувана платформа відхиляється (${r.status})`);
 
 // 7. Хуки Meta: готуємо підключення з токеном і даними
 const connId = 'facebook_aaaaaaaaaaaaaaaaaaaaaaaa';

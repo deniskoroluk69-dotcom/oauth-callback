@@ -35,8 +35,6 @@ export function createUnavailableBackend(): Backend {
     disconnect: fail,
     refreshNow: fail,
     connectTelegram: fail,
-    connectPodcast: fail,
-    importLinkedIn: fail,
     getDaily: async () => [],
     getContent: async () => [],
     deleteAccount: fail,

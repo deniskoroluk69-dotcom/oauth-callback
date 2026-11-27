@@ -48,9 +48,6 @@ function card(id: PlatformId, list: Connection[]): string {
   let actions = '';
   if (p.enabled) {
     actions = `<button class="btn ${list.length ? 'btn-secondary' : 'btn-primary'}" data-connect="${id}">${list.length ? `+ ${t('connections.addAccount')}` : t('connections.connect')}</button>`;
-  } else if (p.uploadFallback) {
-    actions = `<button class="btn btn-primary" data-upload="${id}">${ICON.upload}${t('connections.linkedin.upload')}</button>
-      <button class="btn btn-secondary" disabled aria-disabled="true">${t('connections.linkedin.oauthSoon')}</button>`;
   } else {
     actions = `<button class="btn btn-secondary" disabled aria-disabled="true">${t('common.soon')}</button>`;
   }
@@ -61,8 +58,7 @@ function card(id: PlatformId, list: Connection[]): string {
       <div style="min-width:0;flex:1"><h2 id="h-${id}">${esc(p.name)}</h2></div>
       <span class="status status-${st}">${t(`connections.status.${st}`)}</span>
     </div>
-    ${!p.enabled && !p.uploadFallback ? `<p class="muted" style="margin:0;font-size:.875rem">${t('connections.soonText')}</p>` : ''}
-    ${p.uploadFallback && !p.enabled ? `<p class="muted" style="margin:0;font-size:.875rem">${t('connections.linkedin.text')}</p>` : ''}
+    ${!p.enabled ? `<p class="muted" style="margin:0;font-size:.875rem">${t('connections.soonText')}</p>` : ''}
     ${id === 'telegram' ? `<p class="faint" style="margin:0">${t('connections.telegram.viewsSoon')}</p>` : ''}
     ${list.length ? `<ul class="acc-list" style="list-style:none;padding:0;margin:0">${list.map(accountRow).join('')}</ul>` : ''}
     ${scopes}
@@ -114,66 +110,6 @@ function telegramDialog(ctx: Ctx) {
   );
 }
 
-function podcastDialog(ctx: Ctx) {
-  openDialog(
-    `<form class="dialog-body" novalidate>
-      <h2 class="dialog-title">${t('connections.podcast.title')}</h2>
-      <p class="muted">${t('connections.podcast.text')}</p>
-      <div data-msg aria-live="polite"></div>
-      <div class="field"><label for="rss">RSS</label><input class="input" id="rss" type="url" inputmode="url" placeholder="${t('connections.podcast.placeholder')}" required></div>
-      <div class="dialog-actions">
-        <button type="button" class="btn btn-ghost" data-close>${t('common.cancel')}</button>
-        <button type="submit" class="btn btn-primary">${t('connections.podcast.add')}</button>
-      </div>
-    </form>`,
-    (dlg) => {
-      const form = dlg.querySelector('form')!;
-      const msg = dlg.querySelector('[data-msg]') as HTMLElement;
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const v = (dlg.querySelector('#rss') as HTMLInputElement).value.trim();
-        try {
-          const u = new URL(v);
-          if (!/^https?:$/.test(u.protocol)) throw new Error('proto');
-        } catch {
-          msg.innerHTML = `<div class="alert alert-error">${t('connections.podcast.invalid')}</div>`;
-          return;
-        }
-        const btn = form.querySelector('[type=submit]') as HTMLButtonElement;
-        btn.disabled = true;
-        btn.innerHTML = `<span class="spinner"></span>`;
-        try {
-          const r = await ctx.backend!.connectPodcast(v);
-          dlg.close();
-          toast(t('connections.podcast.ok', { title: r.title }), 'ok');
-        } catch (err) {
-          msg.innerHTML = `<div class="alert alert-error">${errText(err)}</div>`;
-        } finally {
-          btn.disabled = false;
-          btn.textContent = t('connections.podcast.add');
-        }
-      });
-    },
-  );
-}
-
-function uploadLinkedIn(ctx: Ctx) {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv';
-  input.addEventListener('change', async () => {
-    const f = input.files?.[0];
-    if (!f) return;
-    if (f.size > 5 * 1024 * 1024) return toast(t('connections.linkedin.tooBig'), 'error');
-    try {
-      const r = await ctx.backend!.importLinkedIn(f);
-      toast(t('connections.linkedin.ok', { rows: r.rows }), 'ok');
-    } catch (err) {
-      toast(errText(err), 'error');
-    }
-  });
-  input.click();
-}
 
 async function selectionDialog(ctx: Ctx, id: string) {
   let data;
@@ -257,7 +193,6 @@ export const connectionsPage: Page = {
         const id = (d.connect || d.reconnect) as PlatformId;
         const kind = PLATFORMS[id].connectKind;
         if (kind === 'telegram') return telegramDialog(ctx);
-        if (kind === 'rss') return podcastDialog(ctx);
         el.disabled = true;
         try {
           await backend.startConnect(id, ctx.lang);
@@ -265,8 +200,6 @@ export const connectionsPage: Page = {
           toast(errText(err), 'error');
           el.disabled = false;
         }
-      } else if (d.upload) {
-        uploadLinkedIn(ctx);
       } else if (d.refresh) {
         el.disabled = true;
         try {

@@ -3,5 +3,5 @@
 useDefault = true
 
 [allowlist]
-description = "Назви змінних у коді, які правила помилково приймають за ключі"
+description = "Назви змінних у коді, які правила помилково приймають за ключі (історичні коміти)"
 regexes = ['''^linkedinProvider$''']

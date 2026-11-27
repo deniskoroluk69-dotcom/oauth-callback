@@ -14,14 +14,12 @@ export type PlatformId =
   | 'instagram'
   | 'threads'
   | 'tiktok'
-  | 'linkedin'
-  | 'telegram'
-  | 'podcast';
+  | 'telegram';
 
 /** Провайдер OAuth (одна авторизація може дати кілька платформ, напр. Meta → FB + IG). */
-export type ProviderId = 'google' | 'meta' | 'threads' | 'tiktok' | 'linkedin';
+export type ProviderId = 'google' | 'meta' | 'threads' | 'tiktok';
 
-export type ConnectKind = 'oauth' | 'telegram' | 'rss' | 'upload';
+export type ConnectKind = 'oauth' | 'telegram';
 
 export interface PlatformConfig {
   id: PlatformId;
@@ -30,8 +28,6 @@ export interface PlatformConfig {
   connectKind: ConnectKind;
   /** Головний прапорець. false → «Скоро». */
   enabled: boolean;
-  /** Для LinkedIn: поки OAuth не схвалено — можна завантажувати експорт аналітики. */
-  uploadFallback?: boolean;
   /** Мінімальні права (лише читання). */
   scopes: string[];
   /** Скільки днів історії платформа віддає заднім числом. */
@@ -101,19 +97,6 @@ export const PLATFORMS: Record<PlatformId, PlatformConfig> = {
     color: '#00c2b8',
     revokeUrl: 'https://www.tiktok.com/setting/security',
   },
-  linkedin: {
-    id: 'linkedin',
-    name: 'LinkedIn',
-    provider: 'linkedin',
-    connectKind: 'oauth',
-    // Community Management API ще не схвалено → OAuth вимкнено, працює імпорт експорту.
-    enabled: false,
-    uploadFallback: true,
-    scopes: ['r_organization_admin', 'r_organization_social'],
-    historyDays: 365,
-    color: '#0a66c2',
-    revokeUrl: 'https://www.linkedin.com/mypreferences/d/data-sharing-for-permitted-services',
-  },
   telegram: {
     id: 'telegram',
     name: 'Telegram',
@@ -124,16 +107,6 @@ export const PLATFORMS: Record<PlatformId, PlatformConfig> = {
     historyDays: 0,
     color: '#229ed9',
   },
-  podcast: {
-    id: 'podcast',
-    name: 'Podcast (RSS)',
-    provider: null,
-    connectKind: 'rss',
-    enabled: true,
-    scopes: [],
-    historyDays: 3650,
-    color: '#a855f7',
-  },
 };
 
 export const PLATFORM_ORDER: PlatformId[] = [
@@ -142,9 +115,7 @@ export const PLATFORM_ORDER: PlatformId[] = [
   'instagram',
   'threads',
   'tiktok',
-  'linkedin',
   'telegram',
-  'podcast',
 ];
 
 /** Які платформи відкриває провайдер OAuth. */
@@ -153,7 +124,6 @@ export const PROVIDER_PLATFORMS: Record<ProviderId, PlatformId[]> = {
   meta: ['facebook', 'instagram'],
   threads: ['threads'],
   tiktok: ['tiktok'],
-  linkedin: ['linkedin'],
 };
 
 /** TikTok: 'sandbox' поки застосунок не пройшов перевірку, потім 'production'. */
@@ -206,7 +176,7 @@ export interface ConnectionDoc {
   lastManualRefreshAt?: number | null;
   lastError: string | null;
   expiresAt: number | null;
-  source?: 'oauth' | 'telegram' | 'rss' | 'upload';
+  source?: 'oauth' | 'telegram';
 }
 
 export interface DailyDoc {

@@ -28,6 +28,6 @@ node scripts/secret-scan.mjs
 ## Правила змін
 - Будь-який новий текст — одразу в обох мовах (`uk.json` і `en.json`; юридичні тексти — обидві функції в `legal/*`).
 - Зміна прав (scopes) платформи → онови Privacy Policy (таблиця «право → для чого») і README.
-- TikTok/LinkedIn ротують refresh token: оновлення токена лише через `getFreshTokens` під `withLock`, новий токен записується одразу.
+- TikTok ротує refresh token: оновлення токена лише через `getFreshTokens` під `withLock`, новий токен записується одразу.
 - Нові колекції Firestore — закриті правилами за замовчуванням; додай тест у `tests/rules.test.ts`.
 - Обіцянка в політиці: видалення даних ≤ 7 днів. Не ламай `deleteConnection` / `deleteUserData`.

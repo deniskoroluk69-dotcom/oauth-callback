@@ -26,7 +26,15 @@ function sparkPath(seed: number, w = 520, h = 150, n = 30): { line: string; area
 function heroMock(): string {
   const p = sparkPath(7);
   return `
+  <div class="mock-wrap">
   <div class="mock" aria-hidden="true">
+    <div class="mock-live">
+      <span class="live-dot"></span><strong>${t('home.live.label')}</strong>
+      <span class="rotator" data-rotate>
+        ${PLATFORM_ORDER.map((id, i) => `<span class="rot-item${i === 0 ? ' is-on' : ''}">${platformIcon(id, 'sm')}${PLATFORMS[id].name}</span>`).join('')}
+      </span>
+      <span class="mock-sync">${t('home.live.sync')}</span>
+    </div>
     <div class="mock-kpis">
       <div class="mock-kpi"><div class="l">${t('dashboard.kpi.followers')}</div><div class="v" data-count="48200">${fmtCompact(48200)}</div><div class="d">▲ ${t('home.pv.d1')}</div></div>
       <div class="mock-kpi"><div class="l">${t('dashboard.kpi.views')}</div><div class="v" data-count="1300000">${fmtCompact(1300000)}</div><div class="d">▲ ${t('home.pv.d2')}</div></div>
@@ -41,9 +49,60 @@ function heroMock(): string {
       <circle class="pulse-dot" cx="520" cy="${p.line.split(' ').pop()!.split(',')[1]}" r="4" fill="var(--accent)"/>
     </svg>
     <div class="mock-icons">
-      ${PLATFORM_ORDER.slice(0, 6).map((id) => platformIcon(id, 'sm')).join('')}
+      ${PLATFORM_ORDER.map((id) => platformIcon(id, 'sm')).join('')}
     </div>
+  </div>
+  <div class="mock-toasts" aria-hidden="true">
+    ${(
+      [
+        ['instagram', 't1'],
+        ['youtube', 't2'],
+        ['telegram', 't3'],
+        ['tiktok', 't4'],
+        ['facebook', 't5'],
+        ['threads', 't6'],
+      ] as [PlatformId, string][]
+    )
+      .map(([id, k]) => `<div class="mock-toast">${platformIcon(id, 'sm')}<span><strong>${t(`home.live.${k}`)}</strong><small>${PLATFORMS[id].name} · ${t('home.live.now')}</small></span></div>`)
+      .join('')}
+  </div>
   </div>`;
+}
+
+/** Біжучий рядок з подіями платформ. */
+function ticker(): string {
+  const items = (
+    [
+      ['youtube', 'k1'],
+      ['instagram', 'k2'],
+      ['tiktok', 'k3'],
+      ['facebook', 'k4'],
+      ['telegram', 'k5'],
+      ['threads', 'k6'],
+    ] as [PlatformId, string][]
+  )
+    .map(([id, k]) => `<span class="tick-item">${platformIcon(id, 'sm')}<strong>${PLATFORMS[id].name}</strong><span>${t(`home.ticker.${k}`)}</span></span>`)
+    .join('<span class="tick-sep" aria-hidden="true">✦</span>');
+  // Вміст двічі — для безшовної нескінченної прокрутки.
+  return `<div class="ticker" aria-hidden="true"><div class="ticker-track"><div class="ticker-group">${items}<span class="tick-sep">✦</span></div><div class="ticker-group">${items}<span class="tick-sep">✦</span></div></div></div>`;
+}
+
+/** Смуга з ключовими цифрами сервісу. */
+function statsBand(): string {
+  const item = (value: string, label: string, count?: number) =>
+    `<div class="stat"><span class="stat-value"${count !== undefined ? ` data-count-int="${count}"` : ''}>${value}</span><span class="stat-label">${label}</span></div>`;
+  return `
+    <section class="section" aria-labelledby="stats-h">
+      <div class="container">
+        <div class="section-head"><h2 id="stats-h">${t('home.stats.title')}</h2></div>
+        <div class="stats-band">
+          ${item(String(PLATFORM_ORDER.length), t('home.stats.s1'), PLATFORM_ORDER.length)}
+          ${item('05:00', t('home.stats.s2'))}
+          ${item('90', t('home.stats.s3'), 90)}
+          ${item('0', t('home.stats.s4'))}
+        </div>
+      </div>
+    </section>`;
 }
 
 /** Мініатюрні превʼю кабінету (живий HTML у стилі сайту — без зображень і заглушок). */
@@ -116,7 +175,9 @@ export const homePage: Page = {
         </div>
         ${heroMock()}
       </div>
+      <div class="hero-blobs" aria-hidden="true"><span></span><span></span><span></span></div>
     </section>
+    ${ticker()}
 
     <section class="section" id="features" aria-labelledby="features-h">
       <div class="container">
@@ -130,11 +191,13 @@ export const homePage: Page = {
     <section class="section" id="how" aria-labelledby="how-h">
       <div class="container">
         <div class="section-head"><h2 id="how-h">${t('home.howTitle')}</h2></div>
-        <ol class="grid-3" style="list-style:none;padding:0;margin:0">
+        <ol class="grid-3 steps" style="list-style:none;padding:0;margin:0">
           ${[1, 2, 3].map((n) => `<li class="card"><span class="step-num">${n}</span><h3>${t(`home.s${n}t`)}</h3><p class="muted">${t(`home.s${n}d`)}</p></li>`).join('')}
         </ol>
       </div>
     </section>
+
+    ${statsBand()}
 
     <section class="section" id="platforms" aria-labelledby="pl-h">
       <div class="container">
@@ -142,7 +205,7 @@ export const homePage: Page = {
         <ul class="platform-grid" style="list-style:none;padding:0;margin:0">
           ${PLATFORM_ORDER.map((id) => {
             const p = PLATFORMS[id];
-            const soon = !p.enabled && !p.uploadFallback;
+            const soon = !p.enabled;
             return `<li class="platform-chip">${platformIcon(id)}<span>${p.name}</span>${soon ? `<span class="status status-soon soon">${t('common.soon')}</span>` : ''}</li>`;
           }).join('')}
         </ul>

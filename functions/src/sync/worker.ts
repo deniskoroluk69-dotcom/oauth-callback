@@ -41,7 +41,7 @@ export async function runSync(task: SyncTask, attempt: { retryCount: number; max
   const snap = await ref.get();
   if (!snap.exists) return;
   const conn = snap.data() as StoredConnection;
-  if (conn.status === 'disconnected' || conn.source === 'upload') return;
+  if (conn.status === 'disconnected') return;
   if (conn.provider && !PLATFORMS[conn.platform].enabled) return;
 
   const to = addDays(kyivDate(), -1);

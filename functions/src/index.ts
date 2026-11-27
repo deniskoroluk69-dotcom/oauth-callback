@@ -72,7 +72,5 @@ export const confirmSelection = onCall(callOpts, handlers.confirmSelection);
 export const disconnectConnection = onCall(callOpts, handlers.disconnectConnection);
 export const refreshNow = onCall(callOpts, handlers.refreshNow);
 export const connectTelegram = onCall(callOpts, handlers.connectTelegram);
-export const connectPodcast = onCall({ enforceAppCheck: appCheck, timeoutSeconds: 60 }, handlers.connectPodcast);
-export const importLinkedIn = onCall({ enforceAppCheck: appCheck, memory: '512MiB', timeoutSeconds: 120 }, handlers.importLinkedIn);
 export const deleteAccount = onCall({ ...callOpts, timeoutSeconds: 300 }, handlers.deleteAccount);
 export const submitContact = onCall({ enforceAppCheck: appCheck }, handlers.submitContact);
